@@ -29,7 +29,7 @@ const SHEET_ID = "1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
 
 const SHEETS = [
   { nama: "KORDINAT PALLET G1", gid: "1990508695" },
-  { nama: "KORDINAT PALLET G6", gid: "113664921" },
+  { nama: "KORDINAT PALLET G2", gid: "113664921" },
   { nama: "KORDINAT PALLET G7", gid: "626514614" },
   { nama: "KORDINAT PALLET G8", gid: "876120312" }
 ];
@@ -117,11 +117,11 @@ async function ambilSheet(info){
     return [];
   }
 
-  const idxKoordinat = 8;
+  const idxKoordinat = headers.indexOf("KORDINAT PALLET");
   const idxOddo = headers.indexOf("ODDO");
   const idxBarcode = headers.indexOf("BARCODE");
   const idxNama = headers.indexOf("NAMA");
-  const idxHeron = headers.indexOf("HERON");
+  const idxCode = headers.indexOf("CODE");
   const idxBatch = headers.indexOf("BATCH");
   const idxQty = 20;
   const idxExp = headers.indexOf("EXP DATE");
