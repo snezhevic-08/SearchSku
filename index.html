@@ -1,212 +1,340 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cari Barang Odoo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f4f7;
-      padding: 20px;
-    }
+<title>Cari Barang Odoo</title>
 
-    .box {
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-    }
+<style>
+body{
+  font-family:Arial;
+  background:#f2f4f7;
+  padding:20px;
+}
 
-    input {
-      width: 100%;
-      padding: 14px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
+.box{
+  max-width:900px;
+  margin:auto;
+  background:white;
+  padding:20px;
+  border-radius:16px;
+}
 
-    button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      background: #111;
-      color: white;
-      font-size: 16px;
-    }
+input{
+  width:100%;
+  padding:14px;
+  font-size:18px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
 
-    .card {
-      background: #eef4ff;
-      padding: 15px;
-      margin-top: 15px;
-      border-radius: 12px;
-      line-height: 1.8;
-    }
+button{
+  width:100%;
+  margin-top:10px;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:#111;
+  color:white;
+  font-size:16px;
+}
 
-    .total {
-      background: #dfffe2;
-    }
+.card{
+  background:#eef4ff;
+  padding:15px;
+  margin-top:15px;
+  border-radius:12px;
+  line-height:1.8;
+}
 
-    .error {
-      color: red;
-      margin-top: 15px;
-    }
-  </style>
+.total{
+  background:#dfffe2;
+}
+
+.error{
+  color:red;
+  margin-top:15px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="box">
-  <h2>🔎 Cari Barang Odoo</h2>
 
-  <input id="kode" placeholder="Masukkan kode Odoo...">
+<h2>🔎 Cari Barang Odoo</h2>
 
-  <button onclick="cariBarang()">Cari Barang</button>
+<input
+id="kode"
+placeholder="Masukkan kode ODDO..."
+>
 
-  <div id="hasil">Mengambil data...</div>
+<button onclick="cariBarang()">
+Cari Barang
+</button>
+
+<div id="hasil">
+Mengambil data...
+</div>
+
 </div>
 
 <script>
-const SHEET_ID = "1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
+
+const SHEET_ID =
+"1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
 
 const SHEETS = [
-  "KORDINAT PALLET G1",
-  "KORDINAT PALLET G6",
-  "KORDINAT PALLET G7",
-  "KORDINAT PALLET G8"
+"KORDINAT PALLET G1",
+"KORDINAT PALLET G6",
+"KORDINAT PALLET G7",
+"KORDINAT PALLET G8"
 ];
 
 let semuaData = [];
 
-async function ambilSheet(sheetName) {
-  const url =
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+async function ambilSheet(sheetName){
 
-  const res = await fetch(url);
-  const text = await res.text();
+const url =
+`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
-  const jsonText = text.substring(
-    text.indexOf("{"),
-    text.lastIndexOf("}") + 1
-  );
+const res = await fetch(url);
 
-  const json = JSON.parse(jsonText);
-  const rows = json.table.rows;
+const text = await res.text();
 
-  if (rows.length === 0) return [];
+const jsonText =
+text.substring(
+text.indexOf("{"),
+text.lastIndexOf("}") + 1
+);
 
-  const headers = rows[0].c.map(col =>
-    col?.v?.toString().trim().toUpperCase() || ""
-  );
+const json = JSON.parse(jsonText);
 
-  const idxKoordinat = headers.indexOf("KORDINAT");
-  const idxOddo = headers.indexOf("ODDO");
-  const idxBarcode = headers.indexOf("BARCODE");
-  const idxNama = headers.indexOf("NAMA");
-  const idxBatch = headers.indexOf("BATCH");
-  const idxQty = headers.indexOf("QTY");
-  const idxExp = headers.indexOf("EXP DATE");
+const rows = json.table.rows;
 
-  return rows.slice(1).map(row => {
-    const c = row.c || [];
+if(rows.length < 8) return [];
 
-    return {
-      sheet: sheetName,
-      koordinat: c[idxKoordinat]?.v || "-",
-      oddo: c[idxOddo]?.v || "-",
-      barcode: c[idxBarcode]?.v || "-",
-      nama: c[idxNama]?.v || "-",
-      batch: c[idxBatch]?.v || "-",
-      stock: c[idxQty]?.v || "0",
-      exp: c[idxExp]?.v || "-"
-    };
-  }).filter(item => item.oddo !== "-");
+
+// HEADER ADA DI BARIS 7
+const headers = rows[6].c.map(col =>
+col?.v?.toString().trim().toUpperCase() || ""
+);
+
+const idxKoordinat = headers.indexOf("KORDINAT");
+const idxOddo = headers.indexOf("ODDO");
+const idxBarcode = headers.indexOf("BARCODE");
+const idxNama = headers.indexOf("NAMA");
+const idxCode = headers.indexOf("CODE");
+const idxBatch = headers.indexOf("BATCH");
+const idxQty = headers.indexOf("QTY");
+const idxExp = headers.indexOf("EXP DATE");
+
+
+// DATA DIMULAI DARI BARIS 8
+return rows.slice(7).map(row => {
+
+const c = row.c || [];
+
+return {
+
+sheet: sheetName,
+
+koordinat:
+c[idxKoordinat]?.v || "-",
+
+oddo:
+c[idxOdddo]?.v || "-",
+
+barcode:
+c[idxBarcode]?.v || "-",
+
+nama:
+c[idxNama]?.v ||
+c[idxCode]?.v ||
+"-",
+
+batch:
+c[idxBatch]?.v || "-",
+
+stock:
+c[idxQty]?.v || "0",
+
+exp:
+c[idxExp]?.v || "-"
+
+};
+
+}).filter(item =>
+item.oddo !== "-"
+);
+
 }
 
-async function loadData() {
-  semuaData = [];
+async function loadData(){
 
-  for (const sheet of SHEETS) {
-    try {
-      const data = await ambilSheet(sheet);
-      semuaData.push(...data);
-    } catch (err) {
-      console.log("Gagal membaca:", sheet, err);
-    }
-  }
+semuaData = [];
 
-  document.getElementById("hasil").innerHTML =
-    "Data siap. Silakan cari pakai kode Odoo.";
+for(const sheet of SHEETS){
+
+try{
+
+const data =
+await ambilSheet(sheet);
+
+semuaData.push(...data);
+
+}catch(err){
+
+console.log(
+"Gagal membaca:",
+sheet,
+err
+);
+
 }
 
-function angkaStock(stock) {
-  return parseFloat(
-    String(stock)
-      .replace(",", ".")
-      .replace(/[^0-9.]/g, "")
-  ) || 0;
 }
 
-function bersihkanKode(teks) {
-  return String(teks)
-    .trim()
-    .toLowerCase()
-    .replace(/\s/g, "")
-    .replace(/^0+/, "");
+document.getElementById("hasil").innerHTML =
+"Data siap. Cari menggunakan kode ODDO.";
+
 }
 
-async function cariBarang() {
-  const kodeAsli = document.getElementById("kode").value.trim();
-  const kode = bersihkanKode(kodeAsli);
-  const hasil = document.getElementById("hasil");
+function bersihkan(teks){
 
-  if (!kodeAsli) {
-    hasil.innerHTML = `<div class="error">Masukkan kode Odoo dulu.</div>`;
-    return;
-  }
+return String(teks)
+.trim()
+.toLowerCase()
+.replace(/\s/g,"")
+.replace(/^0+/,"");
 
-  const ditemukan = semuaData.filter(item => {
-    const oddoSheet = bersihkanKode(item.oddo);
-    return oddoSheet.includes(kode);
-  });
+}
 
-  if (ditemukan.length === 0) {
-    hasil.innerHTML = `<div class="error">Barang tidak ditemukan.</div>`;
-    return;
-  }
+function angkaStock(stock){
 
-  const totalStock = ditemukan.reduce((total, item) => {
-    return total + angkaStock(item.stock);
-  }, 0);
+return parseFloat(
+String(stock)
+.replace(",",".")
+.replace(/[^0-9.]/g,"")
+) || 0;
 
-  const dataPertama = ditemukan[0];
+}
 
-  hasil.innerHTML = `
-    <div class="card total">
-      <h3>Hasil Pencarian</h3>
-      <b>Barcode:</b> ${dataPertama.barcode}<br>
-      <b>Nama:</b> ${dataPertama.nama}<br>
-      <b>Stock Semua KORDINAT:</b> ${totalStock}
-    </div>
+async function cariBarang(){
 
-    <h3>Stock Masing-Masing Area Koordinat</h3>
-  ` + ditemukan.map(item => `
-    <div class="card">
-      <b>Koordinat:</b> ${item.koordinat}<br>
-      <b>Stock:</b> ${item.stock}<br>
-      <b>Batch:</b> ${item.batch}<br>
-      <b>Exp Date:</b> ${item.exp}<br>
-      <b>Area Sheet:</b> ${item.sheet}
-    </div>
-  `).join("");
+const input =
+document.getElementById("kode").value;
+
+const kode =
+bersihkan(input);
+
+const hasil =
+document.getElementById("hasil");
+
+if(!input){
+
+hasil.innerHTML =
+`<div class="error">
+Masukkan kode ODDO dulu.
+</div>`;
+
+return;
+
+}
+
+const ditemukan =
+semuaData.filter(item => {
+
+const oddoSheet =
+bersihkan(item.oddo);
+
+return oddoSheet.includes(kode);
+
+});
+
+if(ditemukan.length === 0){
+
+hasil.innerHTML =
+`<div class="error">
+Barang tidak ditemukan.
+</div>`;
+
+return;
+
+}
+
+const totalStock =
+ditemukan.reduce((total,item)=>{
+
+return total + angkaStock(item.stock);
+
+},0);
+
+const dataPertama =
+ditemukan[0];
+
+hasil.innerHTML =
+
+`
+<div class="card total">
+
+<h3>Hasil Pencarian</h3>
+
+<b>Barcode:</b>
+${dataPertama.barcode}
+<br>
+
+<b>Nama:</b>
+${dataPertama.nama}
+<br>
+
+<b>Total Stock Semua KORDINAT:</b>
+${totalStock}
+
+</div>
+
+<h3>
+Stock Masing-Masing Area Koordinat
+</h3>
+`
+
++
+
+ditemukan.map(item =>
+
+`
+<div class="card">
+
+<b>Koordinat:</b>
+${item.koordinat}
+<br>
+
+<b>Stock:</b>
+${item.stock}
+<br>
+
+<b>Batch:</b>
+${item.batch}
+<br>
+
+<b>Exp Date:</b>
+${item.exp}
+<br>
+
+<b>Area:</b>
+${item.sheet}
+
+</div>
+`
+
+).join("");
+
 }
 
 loadData();
+
 </script>
 
 </body>
