@@ -123,7 +123,7 @@ async function ambilSheet(info){
   const idxNama = headers.indexOf("NAMA");
   const idxCode = headers.indexOf("CODE");
   const idxBatch = headers.indexOf("BATCH");
-  const idxQty = headers.indexOf("QTY");
+  const idxQty = 20;
   const idxExp = headers.indexOf("EXP DATE");
 
   return rows.slice(headerIndex + 1).map(r => {
