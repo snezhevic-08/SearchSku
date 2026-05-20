@@ -117,7 +117,7 @@ async function ambilSheet(info){
     return [];
   }
 
-  const idxKoordinat = headers.indexOf("KORDINAT PALLET");
+  const idxKoordinat = headers.indexOf("KORDINAT");
   const idxOddo = headers.indexOf("ODDO");
   const idxBarcode = headers.indexOf("BARCODE");
   const idxNama = headers.indexOf("NAMA");
@@ -125,19 +125,26 @@ async function ambilSheet(info){
   const idxBatch = headers.indexOf("BATCH");
   const idxQty = 20;
   const idxExp = headers.indexOf("EXP DATE");
+  const idxHeron = 9;
 
   return rows.slice(headerIndex + 1).map(r => {
-    return {
-      sheet: info.nama,
-      koordinat: r[idxKoordinat] || "-",
-      oddo: r[idxOddo] || "-",
-      barcode: r[idxBarcode] || "-",
-      nama: r[idxNama] || r[idxCode] || "-",
-      batch: r[idxBatch] || "-",
-      stock: r[idxQty] || "0",
-      exp: r[idxExp] || "-"
-    };
-  }).filter(item => item.oddo && item.oddo !== "-");
+  return {
+    sheet: info.nama,
+    koordinat: r[idxKoordinat] || "-",
+    oddo: r[idxOddo] || "-",
+    barcode: r[idxBarcode] || "-",
+
+    nama:
+      r[idxNama] ||
+      r[idxHeron] ||
+      r[idxCode] ||
+      "-",
+
+    batch: r[idxBatch] || "-",
+    stock: r[idxQty] || "0",
+    exp: r[idxExp] || "-"
+  };
+}).filter(item => item.oddo && item.oddo !== "-");
 }
 
 async function loadData(){
