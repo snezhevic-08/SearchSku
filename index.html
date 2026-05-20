@@ -139,7 +139,7 @@ async function ambilSheet(info){
       r[idxHeron] ||
       r[idxCode] ||
       "-",
-
+    heron: r[idxHeron] || "-",
     batch: r[idxBatch] || "-",
     stock: r[idxQty] || "0",
     exp: r[idxExp] || "-"
@@ -208,7 +208,10 @@ function cariBarang(){
       <b>Stock:</b> ${item.stock}<br>
       <b>Batch:</b> ${item.batch}<br>
       <b>Exp Date:</b> ${item.exp}<br>
-      <b>Area:</b> ${item.sheet}
+      <b>Area:</b> ${item.sheet}<br>
+
+<b>Kode Heron:</b>
+${item.heron || "-"}
     </div>
   `).join("");
 }
