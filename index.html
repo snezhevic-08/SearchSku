@@ -272,8 +272,11 @@ async function ambilSheet(info){
 }).filter(item => item.oddo && item.oddo !== "-");
 }
 
-async function loadData(){
+  async function loadData(){
   semuaData = [];
+
+  document.getElementById("hasil").innerHTML =
+    "Mengambil data...";
 
   for(const sheet of SHEETS){
     try{
@@ -286,7 +289,7 @@ async function loadData(){
 
   document.getElementById("hasil").innerHTML =
     `Data siap. Total data terbaca: ${semuaData.length}`;
-}
+  }
 
 function cariBarang(){
   const input = document.getElementById("kode").value;
