@@ -6,15 +6,59 @@
   <title>Cari Barang Odoo</title>
 
   <style>
-    body { font-family: Arial; background:#f2f4f7; padding:20px; }
-    .box { max-width:900px; margin:auto; background:white; padding:20px; border-radius:16px; }
-    input { width:100%; padding:14px; font-size:18px; border-radius:10px; border:1px solid #ccc; box-sizing:border-box; }
-    button { width:100%; margin-top:10px; padding:14px; border:none; border-radius:10px; background:#111; color:white; font-size:16px; }
-    .card { background:#eef4ff; padding:15px; margin-top:15px; border-radius:12px; line-height:1.8; }
-    .total { background:#dfffe2; }
-    .error { color:red; margin-top:15px; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f4f7;
+      padding: 20px;
+    }
+
+    .box {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+      font-size: 16px;
+    }
+
+    .card {
+      background: #eef4ff;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 12px;
+      line-height: 1.8;
+    }
+
+    .total {
+      background: #dfffe2;
+    }
+
+    .error {
+      color: red;
+      margin-top: 15px;
+    }
   </style>
 </head>
+
 <body>
 
 <div class="box">
@@ -40,7 +84,8 @@ const SHEETS = [
 let semuaData = [];
 
 async function ambilSheet(sheetName) {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  const url =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
   const res = await fetch(url);
   const text = await res.text();
@@ -107,18 +152,28 @@ function angkaStock(stock) {
   ) || 0;
 }
 
+function bersihkanKode(teks) {
+  return String(teks)
+    .trim()
+    .toLowerCase()
+    .replace(/\s/g, "")
+    .replace(/^0+/, "");
+}
+
 async function cariBarang() {
-  const kode = document.getElementById("kode").value.trim().toLowerCase();
+  const kodeAsli = document.getElementById("kode").value.trim();
+  const kode = bersihkanKode(kodeAsli);
   const hasil = document.getElementById("hasil");
 
-  if (!kode) {
+  if (!kodeAsli) {
     hasil.innerHTML = `<div class="error">Masukkan kode Odoo dulu.</div>`;
     return;
   }
 
-  const ditemukan = semuaData.filter(item =>
-    String(item.oddo).toLowerCase().includes(kode)
-  );
+  const ditemukan = semuaData.filter(item => {
+    const oddoSheet = bersihkanKode(item.oddo);
+    return oddoSheet.includes(kode);
+  });
 
   if (ditemukan.length === 0) {
     hasil.innerHTML = `<div class="error">Barang tidak ditemukan.</div>`;
@@ -134,7 +189,6 @@ async function cariBarang() {
   hasil.innerHTML = `
     <div class="card total">
       <h3>Hasil Pencarian</h3>
-
       <b>Barcode:</b> ${dataPertama.barcode}<br>
       <b>Nama:</b> ${dataPertama.nama}<br>
       <b>Stock Semua KORDINAT:</b> ${totalStock}
