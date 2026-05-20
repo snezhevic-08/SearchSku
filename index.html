@@ -18,10 +18,10 @@ button{width:100%;margin-top:10px;padding:14px;border:none;border-radius:10px;ba
 
 <body>
 <div class="box">
-  <h2>🔎 Cari Barang Odoo</h2>
-  <input id="kode" placeholder="Masukkan kode ODDO...">
-  <button onclick="cariBarang()">Cari Barang</button>
-  <div id="hasil">Mengambil data...</div>
+<h2>🔎 Cari Barang Odoo</h2>
+<input id="kode" placeholder="Masukkan kode ODDO...">
+<button onclick="cariBarang()">Cari Barang</button>
+<div id="hasil">Mengambil data...</div>
 </div>
 
 <script>
@@ -36,25 +36,25 @@ const SHEETS = [
 
 let semuaData = [];
 
-function bersihkan(teks){
-  return String(teks)
+function clean(teks){
+  return String(teks || "")
     .trim()
     .toLowerCase()
     .replace(/\s/g,"")
     .replace(/^0+/,"");
 }
 
-function angkaStock(stock){
+function nilai(c, index){
+  if(index < 0) return "";
+  return c[index]?.v ?? c[index]?.f ?? "";
+}
+
+function angka(stock){
   return parseFloat(
-    String(stock)
+    String(stock || "0")
       .replace(",",".")
       .replace(/[^0-9.]/g,"")
   ) || 0;
-}
-
-function ambilNilai(c, index){
-  if(index < 0) return "-";
-  return c[index]?.v ?? c[index]?.f ?? "-";
 }
 
 async function ambilSheet(sheetName){
@@ -63,31 +63,29 @@ async function ambilSheet(sheetName){
   const res = await fetch(url);
   const text = await res.text();
 
-  const jsonText = text.substring(
-    text.indexOf("{"),
-    text.lastIndexOf("}") + 1
-  );
-
+  const jsonText = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
   const json = JSON.parse(jsonText);
-  const rows = json.table.rows;
+  const rows = json.table.rows || [];
 
   let headerIndex = -1;
   let headers = [];
 
   for(let i = 0; i < rows.length; i++){
-    const calonHeader = rows[i].c.map(col =>
-      col?.v?.toString().trim().toUpperCase() || ""
+    const c = rows[i].c || [];
+
+    const calon = c.map(col =>
+      String(col?.v || "").trim().toUpperCase()
     );
 
-    if(calonHeader.includes("ODDO")){
+    if(calon.includes("ODDO")){
       headerIndex = i;
-      headers = calonHeader;
+      headers = calon;
       break;
     }
   }
 
   if(headerIndex === -1){
-    console.log("Header ODDO tidak ditemukan di", sheetName);
+    console.log("Header ODDO tidak ditemukan:", sheetName);
     return [];
   }
 
@@ -103,17 +101,19 @@ async function ambilSheet(sheetName){
   return rows.slice(headerIndex + 1).map(row => {
     const c = row.c || [];
 
+    const namaBarang = nilai(c, idxNama) || nilai(c, idxCode);
+
     return {
       sheet: sheetName,
-      koordinat: ambilNilai(c, idxKoordinat),
-      oddo: ambilNilai(c, idxOddo),
-      barcode: ambilNilai(c, idxBarcode),
-      nama: ambilNilai(c, idxNama) !== "-" ? ambilNilai(c, idxNama) : ambilNilai(c, idxCode),
-      batch: ambilNilai(c, idxBatch),
-      stock: ambilNilai(c, idxQty),
-      exp: ambilNilai(c, idxExp)
+      koordinat: nilai(c, idxKoordinat),
+      oddo: nilai(c, idxOddo),
+      barcode: nilai(c, idxBarcode),
+      nama: namaBarang,
+      batch: nilai(c, idxBatch),
+      stock: nilai(c, idxQty),
+      exp: nilai(c, idxExp)
     };
-  }).filter(item => item.oddo !== "-");
+  }).filter(item => item.oddo);
 }
 
 async function loadData(){
@@ -123,8 +123,8 @@ async function loadData(){
     try{
       const data = await ambilSheet(sheet);
       semuaData.push(...data);
-    }catch(err){
-      console.log("Gagal membaca:", sheet, err);
+    }catch(e){
+      console.log("Gagal:", sheet, e);
     }
   }
 
@@ -134,7 +134,7 @@ async function loadData(){
 
 function cariBarang(){
   const input = document.getElementById("kode").value;
-  const kode = bersihkan(input);
+  const kode = clean(input);
   const hasil = document.getElementById("hasil");
 
   if(!input){
@@ -142,37 +142,41 @@ function cariBarang(){
     return;
   }
 
-  const ditemukan = semuaData.filter(item => {
-    const oddoSheet = bersihkan(item.oddo);
-    return oddoSheet.includes(kode);
-  });
+  const ditemukan = semuaData.filter(item =>
+    clean(item.oddo).includes(kode)
+  );
 
   if(ditemukan.length === 0){
-    hasil.innerHTML = `<div class="error">Barang tidak ditemukan.</div>`;
+    hasil.innerHTML = `
+      <div class="error">
+        Barang tidak ditemukan.<br>
+        Total data terbaca: ${semuaData.length}
+      </div>
+    `;
     return;
   }
 
   const totalStock = ditemukan.reduce((total,item)=>{
-    return total + angkaStock(item.stock);
+    return total + angka(item.stock);
   },0);
 
-  const dataPertama = ditemukan[0];
+  const pertama = ditemukan[0];
 
   hasil.innerHTML = `
     <div class="card total">
       <h3>Hasil Pencarian</h3>
-      <b>Barcode:</b> ${dataPertama.barcode}<br>
-      <b>Nama:</b> ${dataPertama.nama}<br>
-      <b>Total Stock Semua KORDINAT:</b> ${totalStock}
+      <b>Barcode:</b> ${pertama.barcode || "-"}<br>
+      <b>Nama:</b> ${pertama.nama || "-"}<br>
+      <b>Stock Semua KORDINAT:</b> ${totalStock}
     </div>
 
     <h3>Stock Masing-Masing Area Koordinat</h3>
   ` + ditemukan.map(item => `
     <div class="card">
-      <b>Koordinat:</b> ${item.koordinat}<br>
-      <b>Stock:</b> ${item.stock}<br>
-      <b>Batch:</b> ${item.batch}<br>
-      <b>Exp Date:</b> ${item.exp}<br>
+      <b>Koordinat:</b> ${item.koordinat || "-"}<br>
+      <b>Stock:</b> ${item.stock || "0"}<br>
+      <b>Batch:</b> ${item.batch || "-"}<br>
+      <b>Exp Date:</b> ${item.exp || "-"}<br>
       <b>Area:</b> ${item.sheet}
     </div>
   `).join("");
