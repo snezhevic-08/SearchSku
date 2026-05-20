@@ -28,10 +28,10 @@ button{width:100%;margin-top:10px;padding:14px;border:none;border-radius:10px;ba
 const SHEET_ID = "1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
 
 const SHEETS = [
-  "KORDINAT PALLET G1",
-  "KORDINAT PALLET G6",
-  "KORDINAT PALLET G7",
-  "KORDINAT PALLET G8"
+  { nama: "KORDINAT PALLET G1", gid: "1990508695" },
+  { nama: "KORDINAT PALLET G2", gid: "113664921" },
+  { nama: "KORDINAT PALLET G7", gid: "626514614" },
+  { nama: "KORDINAT PALLET G8", gid: "876120312" }
 ];
 
 let semuaData = [];
@@ -44,11 +44,6 @@ function clean(teks){
     .replace(/^0+/,"");
 }
 
-function nilai(c, index){
-  if(index < 0) return "";
-  return c[index]?.v ?? c[index]?.f ?? "";
-}
-
 function angka(stock){
   return parseFloat(
     String(stock || "0")
@@ -57,26 +52,59 @@ function angka(stock){
   ) || 0;
 }
 
-async function ambilSheet(sheetName){
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+function parseCSV(text){
+  const rows = [];
+  let row = [];
+  let value = "";
+  let insideQuotes = false;
+
+  for(let i = 0; i < text.length; i++){
+    const char = text[i];
+    const next = text[i + 1];
+
+    if(char === '"' && insideQuotes && next === '"'){
+      value += '"';
+      i++;
+    } else if(char === '"'){
+      insideQuotes = !insideQuotes;
+    } else if(char === "," && !insideQuotes){
+      row.push(value);
+      value = "";
+    } else if((char === "\n" || char === "\r") && !insideQuotes){
+      if(value || row.length){
+        row.push(value);
+        rows.push(row);
+        row = [];
+        value = "";
+      }
+      if(char === "\r" && next === "\n") i++;
+    } else {
+      value += char;
+    }
+  }
+
+  if(value || row.length){
+    row.push(value);
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+async function ambilSheet(info){
+  const url =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${info.gid}`;
 
   const res = await fetch(url);
   const text = await res.text();
 
-  const jsonText = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
-  const json = JSON.parse(jsonText);
-  const rows = json.table.rows || [];
+  const rows = parseCSV(text);
 
   let headerIndex = -1;
   let headers = [];
 
   for(let i = 0; i < rows.length; i++){
-    const c = rows[i].c || [];
-
-    const calon = c.map(col =>
-      String(col?.v || "").trim().toUpperCase()
-    );
-
+    const calon = rows[i].map(h => String(h).trim().toUpperCase());
     if(calon.includes("ODDO")){
       headerIndex = i;
       headers = calon;
@@ -85,7 +113,7 @@ async function ambilSheet(sheetName){
   }
 
   if(headerIndex === -1){
-    console.log("Header ODDO tidak ditemukan:", sheetName);
+    console.log("Header ODDO tidak ditemukan:", info.nama);
     return [];
   }
 
@@ -98,22 +126,18 @@ async function ambilSheet(sheetName){
   const idxQty = headers.indexOf("QTY");
   const idxExp = headers.indexOf("EXP DATE");
 
-  return rows.slice(headerIndex + 1).map(row => {
-    const c = row.c || [];
-
-    const namaBarang = nilai(c, idxNama) || nilai(c, idxCode);
-
+  return rows.slice(headerIndex + 1).map(r => {
     return {
-      sheet: sheetName,
-      koordinat: nilai(c, idxKoordinat),
-      oddo: nilai(c, idxOddo),
-      barcode: nilai(c, idxBarcode),
-      nama: namaBarang,
-      batch: nilai(c, idxBatch),
-      stock: nilai(c, idxQty),
-      exp: nilai(c, idxExp)
+      sheet: info.nama,
+      koordinat: r[idxKoordinat] || "-",
+      oddo: r[idxOddo] || "-",
+      barcode: r[idxBarcode] || "-",
+      nama: r[idxNama] || r[idxCode] || "-",
+      batch: r[idxBatch] || "-",
+      stock: r[idxQty] || "0",
+      exp: r[idxExp] || "-"
     };
-  }).filter(item => item.oddo);
+  }).filter(item => item.oddo && item.oddo !== "-");
 }
 
 async function loadData(){
@@ -124,7 +148,7 @@ async function loadData(){
       const data = await ambilSheet(sheet);
       semuaData.push(...data);
     }catch(e){
-      console.log("Gagal:", sheet, e);
+      console.log("Gagal membaca:", sheet.nama, e);
     }
   }
 
@@ -165,18 +189,18 @@ function cariBarang(){
   hasil.innerHTML = `
     <div class="card total">
       <h3>Hasil Pencarian</h3>
-      <b>Barcode:</b> ${pertama.barcode || "-"}<br>
-      <b>Nama:</b> ${pertama.nama || "-"}<br>
+      <b>Barcode:</b> ${pertama.barcode}<br>
+      <b>Nama:</b> ${pertama.nama}<br>
       <b>Stock Semua KORDINAT:</b> ${totalStock}
     </div>
 
     <h3>Stock Masing-Masing Area Koordinat</h3>
   ` + ditemukan.map(item => `
     <div class="card">
-      <b>Koordinat:</b> ${item.koordinat || "-"}<br>
-      <b>Stock:</b> ${item.stock || "0"}<br>
-      <b>Batch:</b> ${item.batch || "-"}<br>
-      <b>Exp Date:</b> ${item.exp || "-"}<br>
+      <b>Koordinat:</b> ${item.koordinat}<br>
+      <b>Stock:</b> ${item.stock}<br>
+      <b>Batch:</b> ${item.batch}<br>
+      <b>Exp Date:</b> ${item.exp}<br>
       <b>Area:</b> ${item.sheet}
     </div>
   `).join("");
