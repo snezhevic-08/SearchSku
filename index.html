@@ -3,339 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Cari Barang Odoo</title>
 
 <style>
-body{
-  font-family:Arial;
-  background:#f2f4f7;
-  padding:20px;
-}
-
-.box{
-  max-width:900px;
-  margin:auto;
-  background:white;
-  padding:20px;
-  border-radius:16px;
-}
-
-input{
-  width:100%;
-  padding:14px;
-  font-size:18px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
-}
-
-button{
-  width:100%;
-  margin-top:10px;
-  padding:14px;
-  border:none;
-  border-radius:10px;
-  background:#111;
-  color:white;
-  font-size:16px;
-}
-
-.card{
-  background:#eef4ff;
-  padding:15px;
-  margin-top:15px;
-  border-radius:12px;
-  line-height:1.8;
-}
-
-.total{
-  background:#dfffe2;
-}
-
-.error{
-  color:red;
-  margin-top:15px;
-}
+body{font-family:Arial;background:#f2f4f7;padding:20px}
+.box{max-width:900px;margin:auto;background:white;padding:20px;border-radius:16px}
+input{width:100%;padding:14px;font-size:18px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box}
+button{width:100%;margin-top:10px;padding:14px;border:none;border-radius:10px;background:#111;color:white;font-size:16px}
+.card{background:#eef4ff;padding:15px;margin-top:15px;border-radius:12px;line-height:1.8}
+.total{background:#dfffe2}
+.error{color:red;margin-top:15px}
 </style>
 </head>
 
 <body>
-
 <div class="box">
-
-<h2>🔎 Cari Barang Odoo</h2>
-
-<input
-id="kode"
-placeholder="Masukkan kode ODDO..."
->
-
-<button onclick="cariBarang()">
-Cari Barang
-</button>
-
-<div id="hasil">
-Mengambil data...
-</div>
-
+  <h2>🔎 Cari Barang Odoo</h2>
+  <input id="kode" placeholder="Masukkan kode ODDO...">
+  <button onclick="cariBarang()">Cari Barang</button>
+  <div id="hasil">Mengambil data...</div>
 </div>
 
 <script>
-
-const SHEET_ID =
-"1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
+const SHEET_ID = "1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
 
 const SHEETS = [
-"KORDINAT PALLET G1",
-"KORDINAT PALLET G6",
-"KORDINAT PALLET G7",
-"KORDINAT PALLET G8"
+  "KORDINAT PALLET G1",
+  "KORDINAT PALLET G6",
+  "KORDINAT PALLET G7",
+  "KORDINAT PALLET G8"
 ];
 
 let semuaData = [];
 
-async function ambilSheet(sheetName){
-
-const url =
-`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-
-const res = await fetch(url);
-
-const text = await res.text();
-
-const jsonText =
-text.substring(
-text.indexOf("{"),
-text.lastIndexOf("}") + 1
-);
-
-const json = JSON.parse(jsonText);
-
-const rows = json.table.rows;
-
-if(rows.length < 8) return [];
-
-
-// HEADER ADA DI BARIS 7
-const headers = rows[6].c.map(col =>
-col?.v?.toString().trim().toUpperCase() || ""
-);
-
-const idxKoordinat = headers.indexOf("KORDINAT");
-const idxOddo = headers.indexOf("ODDO");
-const idxBarcode = headers.indexOf("BARCODE");
-const idxNama = headers.indexOf("NAMA");
-const idxCode = headers.indexOf("CODE");
-const idxBatch = headers.indexOf("BATCH");
-const idxQty = headers.indexOf("QTY");
-const idxExp = headers.indexOf("EXP DATE");
-
-
-// DATA DIMULAI DARI BARIS 8
-return rows.slice(7).map(row => {
-
-const c = row.c || [];
-
-return {
-
-sheet: sheetName,
-
-koordinat:
-c[idxKoordinat]?.v || "-",
-
-oddo:
-c[idxOdddo]?.v || "-",
-
-barcode:
-c[idxBarcode]?.v || "-",
-
-nama:
-c[idxNama]?.v ||
-c[idxCode]?.v ||
-"-",
-
-batch:
-c[idxBatch]?.v || "-",
-
-stock:
-c[idxQty]?.v || "0",
-
-exp:
-c[idxExp]?.v || "-"
-
-};
-
-}).filter(item =>
-item.oddo !== "-"
-);
-
-}
-
-async function loadData(){
-
-semuaData = [];
-
-for(const sheet of SHEETS){
-
-try{
-
-const data =
-await ambilSheet(sheet);
-
-semuaData.push(...data);
-
-}catch(err){
-
-console.log(
-"Gagal membaca:",
-sheet,
-err
-);
-
-}
-
-}
-
-document.getElementById("hasil").innerHTML =
-"Data siap. Cari menggunakan kode ODDO.";
-
-}
-
 function bersihkan(teks){
-
-return String(teks)
-.trim()
-.toLowerCase()
-.replace(/\s/g,"")
-.replace(/^0+/,"");
-
+  return String(teks)
+    .trim()
+    .toLowerCase()
+    .replace(/\s/g,"")
+    .replace(/^0+/,"");
 }
 
 function angkaStock(stock){
-
-return parseFloat(
-String(stock)
-.replace(",",".")
-.replace(/[^0-9.]/g,"")
-) || 0;
-
+  return parseFloat(
+    String(stock)
+      .replace(",",".")
+      .replace(/[^0-9.]/g,"")
+  ) || 0;
 }
 
-async function cariBarang(){
-
-const input =
-document.getElementById("kode").value;
-
-const kode =
-bersihkan(input);
-
-const hasil =
-document.getElementById("hasil");
-
-if(!input){
-
-hasil.innerHTML =
-`<div class="error">
-Masukkan kode ODDO dulu.
-</div>`;
-
-return;
-
+function ambilNilai(c, index){
+  if(index < 0) return "-";
+  return c[index]?.v ?? c[index]?.f ?? "-";
 }
 
-const ditemukan =
-semuaData.filter(item => {
+async function ambilSheet(sheetName){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
-const oddoSheet =
-bersihkan(item.oddo);
+  const res = await fetch(url);
+  const text = await res.text();
 
-return oddoSheet.includes(kode);
+  const jsonText = text.substring(
+    text.indexOf("{"),
+    text.lastIndexOf("}") + 1
+  );
 
-});
+  const json = JSON.parse(jsonText);
+  const rows = json.table.rows;
 
-if(ditemukan.length === 0){
+  let headerIndex = -1;
+  let headers = [];
 
-hasil.innerHTML =
-`<div class="error">
-Barang tidak ditemukan.
-</div>`;
+  for(let i = 0; i < rows.length; i++){
+    const calonHeader = rows[i].c.map(col =>
+      col?.v?.toString().trim().toUpperCase() || ""
+    );
 
-return;
+    if(calonHeader.includes("ODDO")){
+      headerIndex = i;
+      headers = calonHeader;
+      break;
+    }
+  }
 
+  if(headerIndex === -1){
+    console.log("Header ODDO tidak ditemukan di", sheetName);
+    return [];
+  }
+
+  const idxKoordinat = headers.indexOf("KORDINAT");
+  const idxOddo = headers.indexOf("ODDO");
+  const idxBarcode = headers.indexOf("BARCODE");
+  const idxNama = headers.indexOf("NAMA");
+  const idxCode = headers.indexOf("CODE");
+  const idxBatch = headers.indexOf("BATCH");
+  const idxQty = headers.indexOf("QTY");
+  const idxExp = headers.indexOf("EXP DATE");
+
+  return rows.slice(headerIndex + 1).map(row => {
+    const c = row.c || [];
+
+    return {
+      sheet: sheetName,
+      koordinat: ambilNilai(c, idxKoordinat),
+      oddo: ambilNilai(c, idxOddo),
+      barcode: ambilNilai(c, idxBarcode),
+      nama: ambilNilai(c, idxNama) !== "-" ? ambilNilai(c, idxNama) : ambilNilai(c, idxCode),
+      batch: ambilNilai(c, idxBatch),
+      stock: ambilNilai(c, idxQty),
+      exp: ambilNilai(c, idxExp)
+    };
+  }).filter(item => item.oddo !== "-");
 }
 
-const totalStock =
-ditemukan.reduce((total,item)=>{
+async function loadData(){
+  semuaData = [];
 
-return total + angkaStock(item.stock);
+  for(const sheet of SHEETS){
+    try{
+      const data = await ambilSheet(sheet);
+      semuaData.push(...data);
+    }catch(err){
+      console.log("Gagal membaca:", sheet, err);
+    }
+  }
 
-},0);
+  document.getElementById("hasil").innerHTML =
+    `Data siap. Total data terbaca: ${semuaData.length}`;
+}
 
-const dataPertama =
-ditemukan[0];
+function cariBarang(){
+  const input = document.getElementById("kode").value;
+  const kode = bersihkan(input);
+  const hasil = document.getElementById("hasil");
 
-hasil.innerHTML =
+  if(!input){
+    hasil.innerHTML = `<div class="error">Masukkan kode ODDO dulu.</div>`;
+    return;
+  }
 
-`
-<div class="card total">
+  const ditemukan = semuaData.filter(item => {
+    const oddoSheet = bersihkan(item.oddo);
+    return oddoSheet.includes(kode);
+  });
 
-<h3>Hasil Pencarian</h3>
+  if(ditemukan.length === 0){
+    hasil.innerHTML = `<div class="error">Barang tidak ditemukan.</div>`;
+    return;
+  }
 
-<b>Barcode:</b>
-${dataPertama.barcode}
-<br>
+  const totalStock = ditemukan.reduce((total,item)=>{
+    return total + angkaStock(item.stock);
+  },0);
 
-<b>Nama:</b>
-${dataPertama.nama}
-<br>
+  const dataPertama = ditemukan[0];
 
-<b>Total Stock Semua KORDINAT:</b>
-${totalStock}
+  hasil.innerHTML = `
+    <div class="card total">
+      <h3>Hasil Pencarian</h3>
+      <b>Barcode:</b> ${dataPertama.barcode}<br>
+      <b>Nama:</b> ${dataPertama.nama}<br>
+      <b>Total Stock Semua KORDINAT:</b> ${totalStock}
+    </div>
 
-</div>
-
-<h3>
-Stock Masing-Masing Area Koordinat
-</h3>
-`
-
-+
-
-ditemukan.map(item =>
-
-`
-<div class="card">
-
-<b>Koordinat:</b>
-${item.koordinat}
-<br>
-
-<b>Stock:</b>
-${item.stock}
-<br>
-
-<b>Batch:</b>
-${item.batch}
-<br>
-
-<b>Exp Date:</b>
-${item.exp}
-<br>
-
-<b>Area:</b>
-${item.sheet}
-
-</div>
-`
-
-).join("");
-
+    <h3>Stock Masing-Masing Area Koordinat</h3>
+  ` + ditemukan.map(item => `
+    <div class="card">
+      <b>Koordinat:</b> ${item.koordinat}<br>
+      <b>Stock:</b> ${item.stock}<br>
+      <b>Batch:</b> ${item.batch}<br>
+      <b>Exp Date:</b> ${item.exp}<br>
+      <b>Area:</b> ${item.sheet}
+    </div>
+  `).join("");
 }
 
 loadData();
-
 </script>
-
 </body>
 </html>
