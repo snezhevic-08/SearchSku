@@ -6,7 +6,9 @@
 <title>OddoSearch</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -64,16 +66,25 @@ body.dark .sub{
   color:#94a3b8;
 }
 
+/* BUTTON AREA BARU */
 .top-actions{
-  display:flex;
-  gap:10px;
-  margin-bottom:16px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:18px;
 }
 
 .search-box{
-  display:flex;
-  gap:10px;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
   margin-top:18px;
+}
+
+.action-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
 input{
@@ -92,25 +103,117 @@ input:focus{
 }
 
 button{
-  padding:16px 20px;
   border:none;
-  border-radius:16px;
-  background:linear-gradient(135deg,#111827,#2563eb);
-  color:white;
-  font-size:16px;
-  font-weight:bold;
   cursor:pointer;
+  font-weight:800;
+  letter-spacing:.2px;
+  position:relative;
+  overflow:hidden;
+  transition:.22s ease;
+}
+
+button::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-120%;
+  width:80%;
+  height:100%;
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.35),
+    transparent
+  );
+  transition:.45s ease;
+}
+
+button:hover::before{
+  left:120%;
 }
 
 button:active{
-  transform:scale(.98);
+  transform:scale(.97);
+}
+
+.btn-main,
+.btn-small{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border-radius:18px;
+  color:white;
+  box-shadow:
+    0 12px 24px rgba(37,99,235,.25),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.btn-main{
+  padding:17px 20px;
+  font-size:17px;
+  background:
+    radial-gradient(circle at top left, rgba(96,165,250,.9), transparent 35%),
+    linear-gradient(135deg,#020617,#1d4ed8,#2563eb);
 }
 
 .btn-small{
-  padding:12px 14px;
+  padding:14px 16px;
   font-size:14px;
+  background:
+    radial-gradient(circle at top left, rgba(147,197,253,.75), transparent 38%),
+    linear-gradient(135deg,#0f172a,#1e40af,#2563eb);
 }
 
+.btn-reset{
+  background:
+    radial-gradient(circle at top left, rgba(251,191,36,.75), transparent 38%),
+    linear-gradient(135deg,#1f2937,#334155,#475569);
+}
+
+.btn-dark{
+  background:
+    radial-gradient(circle at top left, rgba(168,85,247,.75), transparent 38%),
+    linear-gradient(135deg,#020617,#312e81,#2563eb);
+}
+
+.btn-scan{
+  background:
+    radial-gradient(circle at top left, rgba(34,211,238,.8), transparent 38%),
+    linear-gradient(135deg,#022c22,#0f766e,#2563eb);
+}
+
+.btn-icon{
+  width:32px;
+  height:32px;
+  min-width:32px;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.btn-text{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  line-height:1.1;
+}
+
+.btn-title{
+  font-size:15px;
+}
+
+.btn-sub{
+  font-size:11px;
+  font-weight:600;
+  opacity:.8;
+  margin-top:3px;
+}
+
+/* CARD */
 .card{
   background:#eef4ff;
   padding:18px;
@@ -161,7 +264,9 @@ body.dark .card{
 }
 
 @keyframes putar{
-  to{transform:rotate(360deg)}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
 @keyframes muncul{
@@ -186,6 +291,8 @@ body.dark .card{
   padding:8px 12px;
   border-radius:12px;
   font-size:13px;
+  background:linear-gradient(135deg,#020617,#2563eb);
+  color:white;
 }
 
 .badge{
@@ -206,12 +313,12 @@ body.dark .card{
 }
 
 @media(max-width:600px){
-  .search-box{
-    flex-direction:column;
+  .top-actions{
+    grid-template-columns:1fr;
   }
 
-  .top-actions{
-    flex-direction:column;
+  .action-row{
+    grid-template-columns:1fr;
   }
 
   button{
@@ -238,14 +345,43 @@ body.dark .card{
   </div>
 
   <div class="top-actions">
-    <button class="btn-small" onclick="toggleDark()">🌙 Dark Mode</button>
-    <button class="btn-small" onclick="resetCari()">🔄 Reset</button>
+    <button class="btn-small btn-dark" onclick="toggleDark()">
+      <span class="btn-icon">🌙</span>
+      <span class="btn-text">
+        <span class="btn-title">Dark Mode</span>
+        <span class="btn-sub">ubah tema</span>
+      </span>
+    </button>
+
+    <button class="btn-small btn-reset" onclick="resetCari()">
+      <span class="btn-icon">↩️</span>
+      <span class="btn-text">
+        <span class="btn-title">Reset</span>
+        <span class="btn-sub">bersihkan hasil</span>
+      </span>
+    </button>
   </div>
 
   <div class="search-box">
     <input id="kode" placeholder="Masukkan kode ODDO atau Barcode...">
-    <button onclick="cariBarang()">Cari</button>
-    <button onclick="scanBarcode()">📷 Scan</button>
+
+    <div class="action-row">
+      <button class="btn-main" onclick="cariBarang()">
+        <span class="btn-icon">🔎</span>
+        <span class="btn-text">
+          <span class="btn-title">Cari</span>
+          <span class="btn-sub">temukan barang</span>
+        </span>
+      </button>
+
+      <button class="btn-main btn-scan" onclick="scanBarcode()">
+        <span class="btn-icon">📷</span>
+        <span class="btn-text">
+          <span class="btn-title">Scan</span>
+          <span class="btn-sub">pakai kamera</span>
+        </span>
+      </button>
+    </div>
   </div>
 
   <div id="history" class="history"></div>
