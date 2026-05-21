@@ -158,6 +158,10 @@ button{
 </div>
 
 <script>
+  let semuaData = [];
+
+function loadData(){
+  
 const SHEET_ID = "1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
 
 const SHEETS = [
@@ -166,8 +170,6 @@ const SHEETS = [
   { nama: "KORDINAT PALLET G7", gid: "626514614" },
   { nama: "KORDINAT PALLET G8", gid: "876120312" }
 ];
-
-let semuaData = [];
 
 function clean(teks){
   return String(teks || "")
@@ -300,9 +302,19 @@ async function ambilSheet(info){
   }
 
 function cariBarang(){
+
+  // cek apakah data sudah siap
+  if (semuaData.length === 0) {
+    alert("Data masih dimuat...");
+    return;
+  }
+
   const input = document.getElementById("kode").value;
   const kode = clean(input);
   const hasil = document.getElementById("hasil");
+
+  // lanjut proses pencarian...
+}
 
   if(!input){
     hasil.innerHTML = `<div class="error">Masukkan kode ODDO dulu.</div>`;
