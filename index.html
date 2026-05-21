@@ -10,251 +10,466 @@
   box-sizing:border-box;
 }
 
+:root{
+  --bg1:#eaf4ff;
+  --bg2:#f2fff5;
+  --text:#0f172a;
+  --muted:#64748b;
+  --card:rgba(255,255,255,.86);
+  --line:rgba(148,163,184,.22);
+  --blue:#2563eb;
+  --cyan:#06b6d4;
+  --green:#10b981;
+  --shadow:0 20px 60px rgba(15,23,42,.12);
+}
+
 body{
   margin:0;
   font-family:Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#e8f3ff,#f7fff0);
-  padding:22px;
-  color:#172033;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(59,130,246,.16), transparent 32%),
+    radial-gradient(circle at 90% 15%, rgba(45,212,191,.14), transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+  padding:18px;
+  color:var(--text);
 }
 
 body.dark{
-  background:linear-gradient(135deg,#020617,#0f172a);
-  color:#e5e7eb;
+  --bg1:#020617;
+  --bg2:#0f172a;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --card:rgba(15,23,42,.82);
+  --line:rgba(148,163,184,.18);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(37,99,235,.28), transparent 32%),
+    radial-gradient(circle at 90% 15%, rgba(20,184,166,.18), transparent 28%),
+    linear-gradient(135deg,#020617,#0f172a);
 }
 
-.box{
-  max-width:920px;
+.app{
+  max-width:980px;
   margin:auto;
-  background:rgba(255,255,255,.92);
+}
+
+.shell{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:32px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px);
   padding:22px;
-  border-radius:24px;
-  box-shadow:0 15px 40px rgba(0,0,0,.08);
+  overflow:hidden;
 }
 
-body.dark .box{
-  background:rgba(15,23,42,.95);
+body.dark .shell{
+  border-color:rgba(148,163,184,.18);
 }
 
-.logo{
+/* HERO */
+.hero{
+  position:relative;
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:16px;
+  padding:24px;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56,189,248,.22), transparent 36%),
+    linear-gradient(135deg,rgba(255,255,255,.92),rgba(239,246,255,.72));
+  border:1px solid rgba(219,234,254,.95);
+  overflow:hidden;
+}
+
+body.dark .hero{
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56,189,248,.18), transparent 36%),
+    linear-gradient(135deg,rgba(15,23,42,.92),rgba(30,41,59,.72));
+  border-color:rgba(148,163,184,.18);
+}
+
+.brand{
   display:flex;
   align-items:center;
-  gap:12px;
-  margin-bottom:22px;
+  gap:14px;
+  z-index:2;
 }
 
 .logo-image{
-  width:72px;
-  height:72px;
+  width:78px;
+  height:78px;
   object-fit:contain;
-  border-radius:18px;
+  border-radius:22px;
 }
 
-h1{
+.brand h1{
   margin:0;
-  font-size:30px;
+  font-size:36px;
+  letter-spacing:-1.2px;
+  color:#0f2a5f;
+}
+
+body.dark .brand h1{
+  color:#eaf2ff;
 }
 
 .sub{
-  margin:3px 0 0;
-  color:#6b7280;
-  font-size:14px;
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.45;
 }
 
-body.dark .sub{
-  color:#94a3b8;
+.hero-art{
+  position:relative;
+  min-height:130px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-.top-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-bottom:18px;
+.cube{
+  width:116px;
+  height:96px;
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255,255,255,.8), transparent 22%),
+    linear-gradient(135deg,#60a5fa,#2563eb,#7c3aed);
+  box-shadow:0 24px 45px rgba(37,99,235,.25);
+  transform:rotate(-4deg);
+  position:relative;
 }
 
-.search-box{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
+.cube::before{
+  content:"";
+  position:absolute;
+  width:42px;
+  height:28px;
+  border-radius:8px;
+  background:rgba(255,255,255,.72);
+  left:36px;
+  bottom:22px;
+  box-shadow:inset 0 -7px 0 rgba(37,99,235,.14);
+}
+
+.lens{
+  width:84px;
+  height:84px;
+  border-radius:50%;
+  border:12px solid rgba(14,165,233,.95);
+  position:absolute;
+  right:18px;
+  top:12px;
+  background:rgba(255,255,255,.25);
+  box-shadow:0 16px 32px rgba(14,165,233,.22);
+}
+
+.lens::after{
+  content:"";
+  width:18px;
+  height:58px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#38bdf8,#2563eb);
+  position:absolute;
+  right:-24px;
+  bottom:-42px;
+  transform:rotate(-42deg);
+}
+
+.dots{
+  position:absolute;
+  right:10px;
+  top:10px;
+  width:90px;
+  height:90px;
+  background-image:radial-gradient(rgba(37,99,235,.22) 2px, transparent 2px);
+  background-size:14px 14px;
+  opacity:.8;
+}
+
+/* SEARCH */
+.search-card{
   margin-top:18px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:26px;
+  background:rgba(255,255,255,.86);
+  border:1px solid var(--line);
+  box-shadow:0 14px 30px rgba(15,23,42,.06);
 }
 
-.action-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+body.dark .search-card{
+  background:rgba(15,23,42,.88);
+}
+
+.search-icon{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  color:white;
+  background:linear-gradient(135deg,#60a5fa,#2563eb);
 }
 
 input{
   flex:1;
-  padding:16px;
-  font-size:18px;
-  border-radius:16px;
-  border:1px solid #d1d5db;
-  outline:none;
-  background:#f9fafb;
-}
-
-body.dark input{
-  background:#0f172a;
-  color:#e5e7eb;
-  border-color:#334155;
-}
-
-input:focus{
-  border-color:#2563eb;
-  box-shadow:0 0 0 4px rgba(37,99,235,.12);
-}
-
-button{
+  min-width:0;
   border:none;
+  outline:none;
+  background:transparent;
+  color:var(--text);
+  font-size:18px;
+  padding:12px 4px;
+}
+
+input::placeholder{
+  color:#94a3b8;
+}
+
+.scan-mini{
+  width:50px;
+  height:50px;
+  border-radius:18px;
+  border:1px solid rgba(59,130,246,.18);
+  background:linear-gradient(135deg,#eff6ff,#ffffff);
+  color:#2563eb;
+  font-size:22px;
   cursor:pointer;
-  font-weight:800;
-  letter-spacing:.2px;
+  box-shadow:0 10px 22px rgba(37,99,235,.12);
+}
+
+body.dark .scan-mini{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#93c5fd;
+}
+
+/* BUTTONS */
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:18px;
+}
+
+.action-btn{
+  min-height:118px;
+  border:none;
+  border-radius:26px;
+  padding:20px;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  cursor:pointer;
   position:relative;
   overflow:hidden;
+  text-align:left;
+  box-shadow:0 18px 35px rgba(37,99,235,.18);
   transition:.22s ease;
 }
 
-button::before{
+.action-btn::before{
   content:"";
   position:absolute;
-  top:0;
-  left:-120%;
-  width:80%;
-  height:100%;
-  background:linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,.35),
-    transparent
-  );
-  transition:.45s ease;
-}
-
-button:hover::before{
-  left:120%;
-}
-
-button:active{
-  transform:scale(.97);
-}
-
-.btn-main,
-.btn-small{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  border-radius:18px;
-  color:white;
-  box-shadow:
-    0 12px 24px rgba(37,99,235,.25),
-    inset 0 1px 0 rgba(255,255,255,.18);
-}
-
-.btn-main{
-  padding:17px 20px;
-  font-size:17px;
+  inset:0;
   background:
-    radial-gradient(circle at top left, rgba(96,165,250,.9), transparent 35%),
-    linear-gradient(135deg,#020617,#1d4ed8,#2563eb);
+    radial-gradient(circle at 18% 12%, rgba(255,255,255,.32), transparent 24%),
+    linear-gradient(120deg, transparent, rgba(255,255,255,.12), transparent);
+  opacity:.9;
 }
 
-.btn-small{
-  padding:14px 16px;
-  font-size:14px;
+.action-btn::after{
+  content:"›";
+  margin-left:auto;
+  font-size:38px;
+  opacity:.62;
+  z-index:2;
 }
 
-.btn-dark{
-  background:
-    radial-gradient(circle at top left, rgba(168,85,247,.75), transparent 38%),
-    linear-gradient(135deg,#020617,#312e81,#2563eb);
-}
-
-.btn-light{
-  background:
-    radial-gradient(circle at top left, rgba(253,224,71,.9), transparent 38%),
-    linear-gradient(135deg,#f59e0b,#f97316,#2563eb);
-}
-
-.btn-reset{
-  background:
-    radial-gradient(circle at top left, rgba(251,191,36,.75), transparent 38%),
-    linear-gradient(135deg,#1f2937,#334155,#475569);
-}
-
-.btn-scan{
-  background:
-    radial-gradient(circle at top left, rgba(34,211,238,.8), transparent 38%),
-    linear-gradient(135deg,#022c22,#0f766e,#2563eb);
+.action-btn:active{
+  transform:scale(.98);
 }
 
 .btn-icon{
-  width:32px;
-  height:32px;
-  min-width:32px;
-  border-radius:12px;
-  background:rgba(255,255,255,.16);
+  width:58px;
+  height:58px;
+  min-width:58px;
+  border-radius:22px;
+  background:rgba(255,255,255,.18);
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+  font-size:28px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
+  z-index:2;
 }
 
-.btn-text{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  line-height:1.1;
+.btn-copy{
+  z-index:2;
 }
 
 .btn-title{
-  font-size:15px;
+  display:block;
+  font-size:22px;
+  font-weight:900;
+  line-height:1.1;
 }
 
 .btn-sub{
-  font-size:11px;
-  font-weight:600;
-  opacity:.8;
-  margin-top:3px;
+  display:block;
+  margin-top:6px;
+  font-size:14px;
+  opacity:.86;
+  font-weight:700;
 }
 
-.card{
-  background:#eef4ff;
-  padding:18px;
-  margin-top:16px;
-  border-radius:20px;
-  line-height:1.8;
-  box-shadow:0 8px 20px rgba(0,0,0,.04);
-  animation:muncul .3s ease;
+.btn-dark{
+  background:linear-gradient(135deg,#020617,#312e81,#2563eb);
 }
 
-body.dark .card{
-  background:#1e293b;
-  color:#e5e7eb;
+.btn-light{
+  background:linear-gradient(135deg,#f59e0b,#fb923c,#2563eb);
 }
 
-.total{
-  background:linear-gradient(135deg,#dcfce7,#bbf7d0);
-  border:1px solid #86efac;
-  color:#14532d;
+.btn-reset{
+  background:linear-gradient(135deg,#0891b2,#0f766e,#0284c7);
 }
 
-body.dark .total{
-  background:linear-gradient(135deg,#064e3b,#065f46);
-  border:1px solid #10b981;
+.btn-search{
+  background:linear-gradient(135deg,#3b82f6,#1d4ed8,#2563eb);
+}
+
+.btn-scan{
+  background:linear-gradient(135deg,#059669,#0d9488,#2563eb);
+}
+
+/* CARDS */
+.panel{
+  margin-top:18px;
+  padding:22px;
+  border-radius:26px;
+  background:rgba(255,255,255,.76);
+  border:1px solid var(--line);
+  box-shadow:0 14px 30px rgba(15,23,42,.055);
+  animation:muncul .28s ease;
+}
+
+body.dark .panel{
+  background:rgba(15,23,42,.76);
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.panel-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.see-all{
+  color:#2563eb;
+  font-weight:800;
+  font-size:14px;
+}
+
+.chips{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.chip{
+  border:none;
+  padding:10px 15px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#f8fafc,#eef4ff);
+  color:#1e3a8a;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:inset 0 0 0 1px rgba(37,99,235,.08);
+}
+
+body.dark .chip{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#bfdbfe;
+}
+
+.status-card{
+  background:
+    radial-gradient(circle at 90% 50%, rgba(16,185,129,.18), transparent 28%),
+    linear-gradient(135deg,#ecfdf5,#f0fdf4);
+  border-color:#a7f3d0;
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+body.dark .status-card{
+  background:
+    radial-gradient(circle at 90% 50%, rgba(16,185,129,.16), transparent 28%),
+    linear-gradient(135deg,#052e16,#064e3b);
+  border-color:rgba(16,185,129,.35);
+}
+
+.status-icon{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:34px;
+  background:linear-gradient(135deg,#4ade80,#16a34a);
+  box-shadow:0 16px 28px rgba(34,197,94,.28);
+}
+
+.status-title{
+  font-size:22px;
+  font-weight:900;
+  color:#065f46;
+}
+
+body.dark .status-title{
   color:#d1fae5;
+}
+
+.status-sub{
+  color:#0f766e;
+  font-size:17px;
+  margin-top:5px;
+}
+
+body.dark .status-sub{
+  color:#a7f3d0;
+}
+
+.status-sub b{
+  color:#059669;
 }
 
 .error{
   background:#fee2e2;
-  color:#dc2626;
+  color:#b91c1c;
   padding:18px;
   margin-top:16px;
-  border-radius:18px;
+  border-radius:22px;
   font-weight:bold;
+  line-height:1.7;
 }
 
 body.dark .error{
@@ -262,20 +477,15 @@ body.dark .error{
   color:#fecaca;
 }
 
-.section-title{
-  margin-top:24px;
-  font-size:22px;
-}
-
 .loading{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
 }
 
 .spinner{
-  width:26px;
-  height:26px;
+  width:30px;
+  height:30px;
   border:4px solid #dbeafe;
   border-top:4px solid #2563eb;
   border-radius:50%;
@@ -299,59 +509,257 @@ body.dark .error{
   }
 }
 
-.success{
-  background:linear-gradient(135deg,#dcfce7,#f0fdf4);
-  border:1px solid #86efac;
-  color:#14532d;
+/* RESULT */
+.result-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
 }
 
-body.dark .success{
-  background:linear-gradient(135deg,#052e16,#064e3b);
-  border:1px solid #10b981;
-  color:#d1fae5;
-}
-
-.history button{
-  margin:4px;
-  padding:8px 12px;
-  border-radius:12px;
-  font-size:13px;
-  background:linear-gradient(135deg,#020617,#2563eb);
-  color:white;
+.result-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:20px;
+  font-weight:900;
 }
 
 .badge{
   display:inline-block;
-  padding:4px 10px;
+  padding:8px 14px;
   border-radius:999px;
   background:#dbeafe;
   color:#1d4ed8;
+  font-size:14px;
+  font-weight:900;
+}
+
+.summary-card{
+  display:grid;
+  grid-template-columns:82px 1fr;
+  gap:18px;
+  padding:18px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#f8fbff,#eff6ff);
+  border:1px solid rgba(59,130,246,.18);
+}
+
+body.dark .summary-card{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+.box-icon{
+  width:72px;
+  height:72px;
+  border-radius:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  background:linear-gradient(135deg,#dbeafe,#ffffff);
+}
+
+body.dark .box-icon{
+  background:linear-gradient(135deg,#1e3a8a,#0f172a);
+}
+
+.summary-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.info-label{
   font-size:13px;
-  font-weight:bold;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+.info-value{
+  font-size:16px;
+  font-weight:900;
+  color:#0f172a;
+  word-break:break-word;
+}
+
+body.dark .info-value{
+  color:#e5e7eb;
+}
+
+.info-value.blue{
+  color:#2563eb;
+}
+
+.coord-list{
+  margin-top:16px;
+  display:grid;
+  gap:12px;
+}
+
+.coord-card{
+  display:grid;
+  grid-template-columns:54px 1fr;
+  gap:14px;
+  align-items:center;
+  padding:16px;
+  border-radius:22px;
+  background:rgba(255,255,255,.78);
+  border:1px solid var(--line);
+}
+
+body.dark .coord-card{
+  background:rgba(15,23,42,.78);
+}
+
+.coord-number{
+  width:44px;
+  height:44px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  color:#2563eb;
+  background:#eff6ff;
+}
+
+body.dark .coord-number{
+  background:#1e3a8a;
+  color:#bfdbfe;
+}
+
+.coord-info{
+  display:grid;
+  grid-template-columns:1.3fr .8fr .9fr .9fr;
+  gap:12px;
 }
 
 .footer{
   text-align:center;
-  margin-top:25px;
+  margin:22px 0 4px;
   color:#64748b;
   font-size:14px;
 }
 
-@media(max-width:600px){
-  .top-actions{
+body.dark .footer{
+  color:#94a3b8;
+}
+
+/* SCANNER OVERLAY */
+.scanner-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.96);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  padding:20px;
+}
+
+.scanner-video{
+  width:100%;
+  max-width:430px;
+  border-radius:26px;
+  box-shadow:0 20px 50px rgba(0,0,0,.45);
+}
+
+.scanner-frame{
+  width:260px;
+  height:130px;
+  border:3px solid #38bdf8;
+  border-radius:18px;
+  position:absolute;
+  box-shadow:0 0 30px rgba(56,189,248,.5);
+  pointer-events:none;
+}
+
+.scanner-text{
+  color:white;
+  margin-top:18px;
+  font-size:18px;
+  text-align:center;
+}
+
+.close-scanner{
+  margin-top:18px;
+  padding:14px 22px;
+  border:none;
+  border-radius:16px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
+  font-size:16px;
+}
+
+/* MOBILE */
+@media(max-width:720px){
+  body{
+    padding:14px;
+  }
+
+  .shell{
+    padding:16px;
+    border-radius:28px;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+    padding:22px;
+  }
+
+  .hero-art{
+    display:none;
+  }
+
+  .brand h1{
+    font-size:34px;
+  }
+
+  .actions{
     grid-template-columns:1fr;
   }
 
-  .action-row{
+  .action-btn{
+    min-height:92px;
+  }
+
+  .summary-card{
     grid-template-columns:1fr;
   }
 
-  button{
-    width:100%;
+  .summary-grid{
+    grid-template-columns:1fr;
   }
 
-  h1{
-    font-size:28px;
+  .coord-info{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:420px){
+  .logo-image{
+    width:66px;
+    height:66px;
+  }
+
+  .brand h1{
+    font-size:30px;
+  }
+
+  .sub{
+    font-size:14px;
+  }
+
+  .search-card{
+    padding:10px;
+  }
+
+  input{
+    font-size:16px;
   }
 }
 </style>
@@ -359,72 +767,82 @@ body.dark .success{
 
 <body>
 
-<div class="box">
+<div class="app">
+  <div class="shell">
 
-  <div class="logo">
-    <img src="logo.png" class="logo-image" alt="OddoSearch Logo">
-    <div>
-      <h1>OddoSearch</h1>
-      <p class="sub">Cari barang, stock, batch, koordinat, dan kode Heron</p>
-    </div>
-  </div>
+    <div class="hero">
+      <div class="brand">
+        <img src="logo.png" class="logo-image" alt="OddoSearch Logo">
+        <div>
+          <h1>OddoSearch</h1>
+          <p class="sub">Cari barang, stock, batch, koordinat, dan kode Heron</p>
+        </div>
+      </div>
 
-  <div class="top-actions">
-    <button id="themeButton" class="btn-small btn-dark" onclick="toggleDark()">
-      <span id="themeIcon" class="btn-icon">🌙</span>
-      <span class="btn-text">
-        <span id="themeTitle" class="btn-title">Dark Mode</span>
-        <span id="themeSub" class="btn-sub">ubah tema gelap</span>
-      </span>
-    </button>
-
-    <button class="btn-small btn-reset" onclick="resetCari()">
-      <span class="btn-icon">↩️</span>
-      <span class="btn-text">
-        <span class="btn-title">Reset</span>
-        <span class="btn-sub">bersihkan hasil</span>
-      </span>
-    </button>
-  </div>
-
-  <div class="search-box">
-    <input id="kode" placeholder="Masukkan kode ODDO atau Barcode...">
-
-    <div class="action-row">
-      <button class="btn-main" onclick="cariBarang()">
-        <span class="btn-icon">🔎</span>
-        <span class="btn-text">
-          <span class="btn-title">Cari</span>
-          <span class="btn-sub">temukan barang</span>
-        </span>
-      </button>
-
-      <button class="btn-main btn-scan" onclick="scanBarcode()">
-        <span class="btn-icon">📷</span>
-        <span class="btn-text">
-          <span class="btn-title">Scan</span>
-          <span class="btn-sub">pakai kamera</span>
-        </span>
-      </button>
-    </div>
-  </div>
-
-  <div id="history" class="history"></div>
-
-  <div id="hasil">
-    <div class="card loading">
-      <div class="spinner"></div>
-      <div>
-        <b>Mengambil data...</b><br>
-        OddoSearch sedang membaca sheet.
+      <div class="hero-art">
+        <div class="dots"></div>
+        <div class="cube"></div>
+        <div class="lens"></div>
       </div>
     </div>
+
+    <div class="search-card">
+      <div class="search-icon">🔎</div>
+      <input id="kode" placeholder="Masukkan kode ODDO atau Barcode...">
+      <button class="scan-mini" onclick="scanBarcode()">⌗</button>
+    </div>
+
+    <div class="actions">
+      <button id="themeButton" class="action-btn btn-dark" onclick="toggleDark()">
+        <span id="themeIcon" class="btn-icon">🌙</span>
+        <span class="btn-copy">
+          <span id="themeTitle" class="btn-title">Dark Mode</span>
+          <span id="themeSub" class="btn-sub">Ubah tema</span>
+        </span>
+      </button>
+
+      <button class="action-btn btn-reset" onclick="resetCari()">
+        <span class="btn-icon">↻</span>
+        <span class="btn-copy">
+          <span class="btn-title">Reset</span>
+          <span class="btn-sub">Bersihkan hasil</span>
+        </span>
+      </button>
+
+      <button class="action-btn btn-search" onclick="cariBarang()">
+        <span class="btn-icon">🔍</span>
+        <span class="btn-copy">
+          <span class="btn-title">Cari</span>
+          <span class="btn-sub">Temukan barang</span>
+        </span>
+      </button>
+
+      <button class="action-btn btn-scan" onclick="scanBarcode()">
+        <span class="btn-icon">📷</span>
+        <span class="btn-copy">
+          <span class="btn-title">Scan</span>
+          <span class="btn-sub">Pakai kamera</span>
+        </span>
+      </button>
+    </div>
+
+    <div id="history" class="panel" style="display:none;"></div>
+
+    <div id="hasil">
+      <div class="panel loading">
+        <div class="spinner"></div>
+        <div>
+          <b>Mengambil data...</b><br>
+          OddoSearch sedang membaca sheet.
+        </div>
+      </div>
+    </div>
+
   </div>
 
-</div>
-
-<div class="footer">
-  OddoSearch © 2026 • Built for #JuaraVibeCoding 🚀
+  <div class="footer">
+    🛡️ OddoSearch © 2026 • Built for #JuaraVibeCoding 🚀
+  </div>
 </div>
 
 <script>
@@ -555,7 +973,7 @@ async function loadData(){
   const hasil = document.getElementById("hasil");
 
   hasil.innerHTML = `
-    <div class="card loading">
+    <div class="panel loading">
       <div class="spinner"></div>
       <div>
         <b>Mengambil data...</b><br>
@@ -589,9 +1007,12 @@ async function loadData(){
   }
 
   hasil.innerHTML = `
-    <div class="card success">
-      ✅ Data siap digunakan.<br>
-      <b>Total data terbaca:</b> ${semuaData.length}
+    <div class="panel status-card">
+      <div class="status-icon">✓</div>
+      <div>
+        <div class="status-title">Data siap digunakan</div>
+        <div class="status-sub">Total data terbaca: <b>${semuaData.length}</b></div>
+      </div>
     </div>
   `;
 }
@@ -612,7 +1033,7 @@ function cariBarang(){
   }
 
   hasil.innerHTML = `
-    <div class="card loading">
+    <div class="panel loading">
       <div class="spinner"></div>
       <div>
         <b>Mencari barang...</b><br>
@@ -647,26 +1068,89 @@ function cariBarang(){
     const pertama = ditemukan[0];
 
     hasil.innerHTML = `
-      <div class="card total">
-        <h3>✅ Hasil Pencarian</h3>
-        <span class="badge">${ditemukan.length} lokasi ditemukan</span><br><br>
-        <b>ODDO:</b> ${pertama.oddo}<br>
-        <b>Barcode:</b> ${pertama.barcode}<br>
-        <b>Nama:</b> ${pertama.nama}<br>
-        <b>Total Stock:</b> ${totalStock}
-      </div>
+      <div class="panel">
+        <div class="result-head">
+          <div class="result-title">📄 Hasil pencarian</div>
+          <span class="badge">${ditemukan.length} lokasi ditemukan</span>
+        </div>
 
-      <h3 class="section-title">📍 Stock Per Koordinat</h3>
-    ` + ditemukan.map(item => `
-      <div class="card">
-        <b>Koordinat:</b> ${item.koordinat}<br>
-        <b>Stock:</b> ${item.stock}<br>
-        <b>Batch:</b> ${item.batch}<br>
-        <b>Exp Date:</b> ${item.exp}<br>
-        <b>Area:</b> ${item.sheet}<br>
-        <b>Kode Heron:</b> ${item.heron || "-"}
+        <div class="summary-card">
+          <div class="box-icon">📦</div>
+
+          <div class="summary-grid">
+            <div>
+              <div class="info-label">ODDO</div>
+              <div class="info-value blue">${pertama.oddo}</div>
+            </div>
+
+            <div>
+              <div class="info-label">Barcode</div>
+              <div class="info-value">${pertama.barcode}</div>
+            </div>
+
+            <div>
+              <div class="info-label">Nama</div>
+              <div class="info-value">${pertama.nama}</div>
+            </div>
+
+            <div>
+              <div class="info-label">Total Stock</div>
+              <div class="info-value blue">${totalStock} PCS</div>
+            </div>
+
+            <div>
+              <div class="info-label">Batch Awal</div>
+              <div class="info-value">${pertama.batch}</div>
+            </div>
+
+            <div>
+              <div class="info-label">Area Awal</div>
+              <div class="info-value blue">${pertama.sheet}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="coord-list">
+          ${ditemukan.map((item,index) => `
+            <div class="coord-card">
+              <div class="coord-number">${String(index + 1).padStart(2,"0")}</div>
+
+              <div class="coord-info">
+                <div>
+                  <div class="info-label">Koordinat</div>
+                  <div class="info-value">${item.koordinat}</div>
+                </div>
+
+                <div>
+                  <div class="info-label">Stock</div>
+                  <div class="info-value blue">${item.stock}</div>
+                </div>
+
+                <div>
+                  <div class="info-label">Batch</div>
+                  <div class="info-value">${item.batch}</div>
+                </div>
+
+                <div>
+                  <div class="info-label">Exp Date</div>
+                  <div class="info-value">${item.exp}</div>
+                </div>
+
+                <div>
+                  <div class="info-label">Area</div>
+                  <div class="info-value">${item.sheet}</div>
+                </div>
+
+                <div>
+                  <div class="info-label">Kode Heron</div>
+                  <div class="info-value">${item.heron || "-"}</div>
+                </div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
       </div>
-    `).join("");
+    `;
   }, 300);
 }
 
@@ -674,9 +1158,12 @@ function resetCari(){
   document.getElementById("kode").value = "";
 
   document.getElementById("hasil").innerHTML = `
-    <div class="card success">
-      ✅ Data siap digunakan.<br>
-      <b>Total data terbaca:</b> ${semuaData.length}
+    <div class="panel status-card">
+      <div class="status-icon">✓</div>
+      <div>
+        <div class="status-title">Data siap digunakan</div>
+        <div class="status-sub">Total data terbaca: <b>${semuaData.length}</b></div>
+      </div>
     </div>
   `;
 }
@@ -704,13 +1191,13 @@ function updateThemeButton(){
     themeButton.classList.add("btn-light");
     themeIcon.textContent = "☀️";
     themeTitle.textContent = "Light Mode";
-    themeSub.textContent = "ubah tema terang";
+    themeSub.textContent = "Ubah tema terang";
   }else{
     themeButton.classList.remove("btn-light");
     themeButton.classList.add("btn-dark");
     themeIcon.textContent = "🌙";
     themeTitle.textContent = "Dark Mode";
-    themeSub.textContent = "ubah tema gelap";
+    themeSub.textContent = "Ubah tema gelap";
   }
 }
 
@@ -737,15 +1224,22 @@ function tampilRiwayat(){
   const history = document.getElementById("history");
 
   if(riwayat.length === 0){
+    history.style.display = "none";
     history.innerHTML = "";
     return;
   }
 
+  history.style.display = "block";
+
   history.innerHTML = `
-    <div class="card">
-      <b>🕘 Riwayat pencarian:</b><br>
+    <div class="panel-head">
+      <div class="panel-title">🕘 Riwayat pencarian</div>
+      <div class="see-all">Lihat semua ›</div>
+    </div>
+
+    <div class="chips">
       ${riwayat.map(k => `
-        <button onclick="pakaiRiwayat('${k}')">${k}</button>
+        <button class="chip" onclick="pakaiRiwayat('${k}')">🕘 ${k}</button>
       `).join("")}
     </div>
   `;
@@ -785,61 +1279,11 @@ async function scanBarcode(){
     const scanBox = document.createElement("div");
 
     scanBox.innerHTML = `
-      <div style="
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,.96);
-        z-index:9999;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-direction:column;
-        padding:20px;
-      ">
-
-        <video id="scannerVideo"
-          autoplay
-          playsinline
-          style="
-            width:100%;
-            max-width:430px;
-            border-radius:22px;
-            box-shadow:0 20px 50px rgba(0,0,0,.45);
-          ">
-        </video>
-
-        <div style="
-          width:260px;
-          height:130px;
-          border:3px solid #38bdf8;
-          border-radius:18px;
-          position:absolute;
-          box-shadow:0 0 30px rgba(56,189,248,.5);
-          pointer-events:none;
-        "></div>
-
-        <p style="
-          color:white;
-          margin-top:18px;
-          font-size:18px;
-          text-align:center;
-        ">
-          📷 Arahkan kamera ke barcode barang
-        </p>
-
-        <button id="tutupScanner" style="
-          margin-top:18px;
-          padding:14px 22px;
-          border:none;
-          border-radius:14px;
-          background:#2563eb;
-          color:white;
-          font-weight:bold;
-          font-size:16px;
-        ">
-          Tutup Scanner
-        </button>
-
+      <div class="scanner-overlay">
+        <video id="scannerVideo" class="scanner-video" autoplay playsinline></video>
+        <div class="scanner-frame"></div>
+        <p class="scanner-text">📷 Arahkan kamera ke barcode barang</p>
+        <button id="tutupScanner" class="close-scanner">Tutup Scanner</button>
       </div>
     `;
 
@@ -895,3 +1339,6 @@ loadData();
 
 </body>
 </html>
+
+
+                                      
