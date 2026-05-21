@@ -95,29 +95,13 @@ body{
   min-width:0;
 }
 
-.logo-icon{
-  width:64px;
-  height:64px;
+.logo-img{
+  width:72px;
+  height:72px;
   flex:0 0 auto;
-  border-radius:22px;
-  background:
-    radial-gradient(circle at 35% 35%,#17d7ff 0 20%,transparent 22%),
-    conic-gradient(from 120deg,#0ea5e9,#2563eb,#061426,#14d7ff);
-  position:relative;
-  box-shadow:0 14px 35px rgba(37,99,235,.35);
-}
-
-.logo-icon::after{
-  content:"";
-  position:absolute;
-  width:22px;
-  height:8px;
-  background:#1d4ed8;
-  border-radius:999px;
-  right:6px;
-  bottom:11px;
-  transform:rotate(45deg);
-  box-shadow:0 0 18px rgba(24,198,255,.7);
+  object-fit:contain;
+  border-radius:20px;
+  filter:drop-shadow(0 14px 26px rgba(37,99,235,.35));
 }
 
 .brand h1{
@@ -311,8 +295,7 @@ body{
 
 .history-card,
 .result-card,
-.status-card,
-.scanner-card{
+.status-card{
   position:relative;
   margin-top:22px;
   border-radius:30px;
@@ -432,37 +415,123 @@ body{
 }
 
 .scanner-card{
+  position:fixed;
+  inset:0;
+  z-index:9999;
   display:none;
+  align-items:center;
+  justify-content:center;
+  padding:28px 18px;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(8px);
 }
 
 .scanner-card.show{
-  display:block;
+  display:flex;
+}
+
+.scanner-popup{
+  width:100%;
+  max-width:620px;
+  text-align:center;
+  animation:popScanner .22s ease;
+}
+
+@keyframes popScanner{
+  from{
+    transform:scale(.94);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.video-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:1 / 1.22;
+  overflow:hidden;
+  border-radius:28px;
+  background:#000;
+  box-shadow:0 28px 80px rgba(0,0,0,.55);
 }
 
 #video{
   width:100%;
-  border-radius:24px;
+  height:100%;
+  object-fit:cover;
   background:#000;
-  margin-top:14px;
+}
+
+.scan-frame{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:62%;
+  height:22%;
+  transform:translate(-50%,-50%);
+  border:4px solid #18c6ff;
+  border-radius:18px;
+  box-shadow:
+    0 0 0 999px rgba(0,0,0,.08),
+    0 0 24px rgba(24,198,255,.75),
+    inset 0 0 18px rgba(24,198,255,.25);
+  pointer-events:none;
+}
+
+.scan-frame::before{
+  content:"";
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:50%;
+  height:3px;
+  border-radius:999px;
+  background:#18c6ff;
+  box-shadow:0 0 18px rgba(24,198,255,.95);
+  animation:scanLine 1.45s infinite ease-in-out;
+}
+
+@keyframes scanLine{
+  0%{
+    transform:translateY(-38px);
+    opacity:.35;
+  }
+  50%{
+    opacity:1;
+  }
+  100%{
+    transform:translateY(38px);
+    opacity:.35;
+  }
 }
 
 .scanner-note{
-  color:var(--muted);
+  margin-top:22px;
+  color:white;
+  font-size:22px;
   font-weight:800;
-  line-height:1.5;
+  line-height:1.45;
+  text-shadow:0 4px 14px rgba(0,0,0,.35);
 }
 
 .stop-btn{
-  margin-top:14px;
-  width:100%;
+  margin-top:24px;
   border:0;
-  border-radius:20px;
-  padding:16px;
-  font-size:18px;
+  border-radius:18px;
+  padding:18px 34px;
+  font-size:20px;
   font-weight:900;
   cursor:pointer;
   color:white;
-  background:linear-gradient(135deg,#ef4444,#b91c1c);
+  background:linear-gradient(135deg,#3b82f6,#2563eb);
+  box-shadow:0 18px 36px rgba(37,99,235,.38);
+}
+
+.stop-btn:active{
+  transform:scale(.97);
 }
 
 .footer{
@@ -496,10 +565,10 @@ body{
     border-radius:26px;
   }
 
-  .logo-icon{
-    width:50px;
-    height:50px;
-    border-radius:17px;
+  .logo-img{
+    width:56px;
+    height:56px;
+    border-radius:16px;
   }
 
   .brand h1{
@@ -630,6 +699,24 @@ body{
     height:70px;
     font-size:42px;
   }
+
+  .scanner-card{
+    padding:24px 18px;
+  }
+
+  .video-wrap{
+    border-radius:24px;
+    aspect-ratio:1 / 1.25;
+  }
+
+  .scanner-note{
+    font-size:18px;
+  }
+
+  .stop-btn{
+    font-size:18px;
+    padding:16px 30px;
+  }
 }
 </style>
 </head>
@@ -641,7 +728,7 @@ body{
 
     <div class="hero">
       <div class="brand">
-        <div class="logo-icon"></div>
+        <img src="logo.png" class="logo-img" alt="Logo SEARCH STORAGE HERON">
         <div>
           <h1>SEARCH STORAGE HERON</h1>
           <p>Cari kode Heron dari ODDO atau Barcode</p>
@@ -713,15 +800,6 @@ body{
       <div class="history-list" id="historyList"></div>
     </div>
 
-    <div class="scanner-card" id="scannerCard">
-      <div class="history-title">📷 Scanner Barcode</div>
-      <div class="scanner-note">
-        Arahkan kamera ke barcode. Setelah terbaca, pencarian akan berjalan otomatis.
-      </div>
-      <video id="video" autoplay playsinline></video>
-      <button class="stop-btn" onclick="stopScan()">Tutup Kamera</button>
-    </div>
-
     <div class="result-card" id="resultCard">
       <div class="result-title">Kode Heron ditemukan</div>
       <div class="heron-result" id="hasilHeron"></div>
@@ -742,6 +820,21 @@ body{
     🛡️ Search Storage Heron © 2026 • Built for #JuaraVibeCoding 🚀
   </div>
 
+</div>
+
+<div class="scanner-card" id="scannerCard">
+  <div class="scanner-popup">
+    <div class="video-wrap">
+      <video id="video" autoplay playsinline muted></video>
+      <div class="scan-frame"></div>
+    </div>
+
+    <div class="scanner-note">
+      📷 Arahkan kamera ke barcode barang
+    </div>
+
+    <button class="stop-btn" onclick="stopScan()">Tutup Scanner</button>
+  </div>
 </div>
 
 <script>
@@ -864,6 +957,7 @@ async function loadData(){
 
 function setStatus(type, icon, title, desc){
   statusCard.classList.remove("loading","error");
+
   if(type === "loading") statusCard.classList.add("loading");
   if(type === "error") statusCard.classList.add("error");
 
@@ -903,6 +997,7 @@ function cariHeron(){
   }
 
   const heronUnik = [];
+
   hasil.forEach(item => {
     const h = item.heron.trim();
     if(h && !heronUnik.includes(h)){
@@ -1003,6 +1098,7 @@ async function startScan(){
 
   try{
     scannerCard.classList.add("show");
+    document.body.style.overflow = "hidden";
 
     stream = await navigator.mediaDevices.getUserMedia({
       video: {
@@ -1011,6 +1107,7 @@ async function startScan(){
     });
 
     video.srcObject = stream;
+    await video.play();
 
     const detector = new BarcodeDetector({
       formats: [
@@ -1051,6 +1148,7 @@ async function startScan(){
 
 function stopScan(){
   scannerCard.classList.remove("show");
+  document.body.style.overflow = "";
 
   if(scanInterval){
     clearInterval(scanInterval);
@@ -1064,6 +1162,12 @@ function stopScan(){
 
   video.srcObject = null;
 }
+
+scannerCard.addEventListener("click", function(e){
+  if(e.target === scannerCard){
+    stopScan();
+  }
+});
 
 kodeInput.addEventListener("keydown", function(e){
   if(e.key === "Enter"){
