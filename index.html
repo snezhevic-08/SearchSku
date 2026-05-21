@@ -60,7 +60,9 @@ h1{
   font-size:14px;
 }
 
-body.dark .sub{color:#94a3b8}
+body.dark .sub{
+  color:#94a3b8;
+}
 
 .top-actions{
   display:flex;
@@ -84,6 +86,11 @@ input{
   background:#f9fafb;
 }
 
+input:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
 button{
   padding:16px 20px;
   border:none;
@@ -93,6 +100,10 @@ button{
   font-size:16px;
   font-weight:bold;
   cursor:pointer;
+}
+
+button:active{
+  transform:scale(.98);
 }
 
 .btn-small{
@@ -107,6 +118,7 @@ button{
   border-radius:20px;
   line-height:1.8;
   box-shadow:0 8px 20px rgba(0,0,0,.04);
+  animation:muncul .3s ease;
 }
 
 body.dark .card{
@@ -120,8 +132,11 @@ body.dark .card{
 }
 
 .error{
+  background:#fee2e2;
   color:#dc2626;
+  padding:18px;
   margin-top:16px;
+  border-radius:18px;
   font-weight:bold;
 }
 
@@ -149,6 +164,17 @@ body.dark .card{
   to{transform:rotate(360deg)}
 }
 
+@keyframes muncul{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
 .success{
   background:linear-gradient(135deg,#dcfce7,#f0fdf4);
   border:1px solid #86efac;
@@ -172,11 +198,29 @@ body.dark .card{
   font-weight:bold;
 }
 
+.footer{
+  text-align:center;
+  margin-top:25px;
+  color:#64748b;
+  font-size:14px;
+}
+
 @media(max-width:600px){
-  .search-box{flex-direction:column}
-  .top-actions{flex-direction:column}
-  button{width:100%}
-  h1{font-size:28px}
+  .search-box{
+    flex-direction:column;
+  }
+
+  .top-actions{
+    flex-direction:column;
+  }
+
+  button{
+    width:100%;
+  }
+
+  h1{
+    font-size:28px;
+  }
 }
 </style>
 </head>
@@ -199,8 +243,9 @@ body.dark .card{
   </div>
 
   <div class="search-box">
-    <input id="kode" placeholder="Masukkan kode ODDO...">
+    <input id="kode" placeholder="Masukkan kode ODDO atau Barcode...">
     <button onclick="cariBarang()">Cari</button>
+    <button onclick="scanBarcode()">📷 Scan</button>
   </div>
 
   <div id="history" class="history"></div>
@@ -215,6 +260,10 @@ body.dark .card{
     </div>
   </div>
 
+</div>
+
+<div class="footer">
+  OddoSearch © 2026 • Built for #JuaraVibeCoding 🚀
 </div>
 
 <script>
@@ -271,7 +320,10 @@ function parseCSV(text){
         row = [];
         value = "";
       }
-      if(char === "\r" && next === "\n") i++;
+
+      if(char === "\r" && next === "\n"){
+        i++;
+      }
     } else {
       value += char;
     }
@@ -299,6 +351,7 @@ async function ambilSheet(info){
 
   for(let i = 0; i < rows.length; i++){
     const calon = rows[i].map(h => String(h).trim().toUpperCase());
+
     if(calon.includes("ODDO")){
       headerIndex = i;
       headers = calon;
@@ -393,57 +446,72 @@ function cariBarang(){
   const hasil = document.getElementById("hasil");
 
   if(!input){
-    hasil.innerHTML = `<div class="error">Masukkan kode ODDO dulu.</div>`;
+    hasil.innerHTML = `<div class="error">Masukkan kode ODDO atau Barcode dulu.</div>`;
     return;
   }
-
-  const ditemukan = semuaData.filter(item =>
-    clean(item.oddo).includes(kode)
-  );
-
-  if(ditemukan.length === 0){
-    hasil.innerHTML = `
-      <div class="error">
-        Barang tidak ditemukan.<br>
-        Total data terbaca: ${semuaData.length}
-      </div>
-    `;
-    return;
-  }
-
-  simpanRiwayat(input);
-
-  const totalStock = ditemukan.reduce((total,item)=>{
-    return total + angka(item.stock);
-  },0);
-
-  const pertama = ditemukan[0];
 
   hasil.innerHTML = `
-    <div class="card total">
-      <h3>✅ Hasil Pencarian</h3>
-      <span class="badge">${ditemukan.length} lokasi ditemukan</span><br><br>
-      <b>ODDO:</b> ${pertama.oddo}<br>
-      <b>Barcode:</b> ${pertama.barcode}<br>
-      <b>Nama:</b> ${pertama.nama}<br>
-      <b>Total Stock:</b> ${totalStock}
+    <div class="card loading">
+      <div class="spinner"></div>
+      <div>
+        <b>Mencari barang...</b><br>
+        Memproses data warehouse.
+      </div>
     </div>
+  `;
 
-    <h3 class="section-title">📍 Stock Per Koordinat</h3>
-  ` + ditemukan.map(item => `
-    <div class="card">
-      <b>Koordinat:</b> ${item.koordinat}<br>
-      <b>Stock:</b> ${item.stock}<br>
-      <b>Batch:</b> ${item.batch}<br>
-      <b>Exp Date:</b> ${item.exp}<br>
-      <b>Area:</b> ${item.sheet}<br>
-      <b>Kode Heron:</b> ${item.heron || "-"}
-    </div>
-  `).join("");
+  setTimeout(() => {
+    const ditemukan = semuaData.filter(item =>
+      clean(item.oddo).includes(kode) ||
+      clean(item.barcode).includes(kode)
+    );
+
+    if(ditemukan.length === 0){
+      hasil.innerHTML = `
+        <div class="error">
+          Barang tidak ditemukan.<br>
+          Coba cek kode ODDO atau Barcode.<br><br>
+          Total data terbaca: ${semuaData.length}
+        </div>
+      `;
+      return;
+    }
+
+    simpanRiwayat(input);
+
+    const totalStock = ditemukan.reduce((total,item)=>{
+      return total + angka(item.stock);
+    },0);
+
+    const pertama = ditemukan[0];
+
+    hasil.innerHTML = `
+      <div class="card total">
+        <h3>✅ Hasil Pencarian</h3>
+        <span class="badge">${ditemukan.length} lokasi ditemukan</span><br><br>
+        <b>ODDO:</b> ${pertama.oddo}<br>
+        <b>Barcode:</b> ${pertama.barcode}<br>
+        <b>Nama:</b> ${pertama.nama}<br>
+        <b>Total Stock:</b> ${totalStock}
+      </div>
+
+      <h3 class="section-title">📍 Stock Per Koordinat</h3>
+    ` + ditemukan.map(item => `
+      <div class="card">
+        <b>Koordinat:</b> ${item.koordinat}<br>
+        <b>Stock:</b> ${item.stock}<br>
+        <b>Batch:</b> ${item.batch}<br>
+        <b>Exp Date:</b> ${item.exp}<br>
+        <b>Area:</b> ${item.sheet}<br>
+        <b>Kode Heron:</b> ${item.heron || "-"}
+      </div>
+    `).join("");
+  }, 300);
 }
 
 function resetCari(){
   document.getElementById("kode").value = "";
+
   document.getElementById("hasil").innerHTML = `
     <div class="card success">
       ✅ Data siap digunakan.<br>
@@ -486,6 +554,132 @@ function tampilRiwayat(){
 function pakaiRiwayat(kode){
   document.getElementById("kode").value = kode;
   cariBarang();
+}
+
+async function scanBarcode(){
+
+  if(!("BarcodeDetector" in window)){
+    alert("Browser belum support scan barcode. Coba buka lewat Google Chrome Android.");
+    return;
+  }
+
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: "environment"
+      }
+    });
+
+    const detector = new BarcodeDetector({
+      formats: [
+        "ean_13",
+        "ean_8",
+        "code_128",
+        "code_39",
+        "qr_code",
+        "upc_a",
+        "upc_e"
+      ]
+    });
+
+    const scanBox = document.createElement("div");
+
+    scanBox.innerHTML = `
+      <div style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.96);
+        z-index:9999;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        padding:20px;
+      ">
+
+        <video id="scannerVideo"
+          autoplay
+          playsinline
+          style="
+            width:100%;
+            max-width:430px;
+            border-radius:22px;
+            box-shadow:0 20px 50px rgba(0,0,0,.45);
+          ">
+        </video>
+
+        <div style="
+          width:260px;
+          height:130px;
+          border:3px solid #38bdf8;
+          border-radius:18px;
+          position:absolute;
+          box-shadow:0 0 30px rgba(56,189,248,.5);
+        "></div>
+
+        <p style="
+          color:white;
+          margin-top:18px;
+          font-size:18px;
+          text-align:center;
+        ">
+          📷 Arahkan kamera ke barcode barang
+        </p>
+
+        <button id="tutupScanner" style="
+          margin-top:18px;
+          padding:14px 22px;
+          border:none;
+          border-radius:14px;
+          background:#2563eb;
+          color:white;
+          font-weight:bold;
+          font-size:16px;
+        ">
+          Tutup Scanner
+        </button>
+
+      </div>
+    `;
+
+    document.body.appendChild(scanBox);
+
+    const videoElement = scanBox.querySelector("#scannerVideo");
+    videoElement.srcObject = stream;
+
+    document.getElementById("tutupScanner").onclick = () => {
+      stream.getTracks().forEach(track => track.stop());
+      scanBox.remove();
+    };
+
+    async function scanLoop(){
+      try{
+        const barcodes = await detector.detect(videoElement);
+
+        if(barcodes.length > 0){
+          const kodeBarcode = barcodes[0].rawValue;
+
+          document.getElementById("kode").value = kodeBarcode;
+
+          stream.getTracks().forEach(track => track.stop());
+          scanBox.remove();
+
+          cariBarang();
+          return;
+        }
+      }catch(err){
+        console.log("Scan error:", err);
+      }
+
+      requestAnimationFrame(scanLoop);
+    }
+
+    scanLoop();
+
+  }catch(err){
+    console.log(err);
+    alert("Kamera tidak bisa dibuka. Izinkan akses kamera dulu.");
+  }
 }
 
 document.getElementById("kode").addEventListener("keydown", function(e){
