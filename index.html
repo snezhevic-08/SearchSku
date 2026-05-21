@@ -41,7 +41,7 @@ body.dark .box{
   display:flex;
   align-items:center;
   gap:12px;
-  margin-bottom:18px;
+  margin-bottom:22px;
 }
 
 .logo-image{
@@ -66,7 +66,6 @@ body.dark .sub{
   color:#94a3b8;
 }
 
-/* BUTTON AREA BARU */
 .top-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -95,6 +94,12 @@ input{
   border:1px solid #d1d5db;
   outline:none;
   background:#f9fafb;
+}
+
+body.dark input{
+  background:#0f172a;
+  color:#e5e7eb;
+  border-color:#334155;
 }
 
 input:focus{
@@ -160,21 +165,24 @@ button:active{
 .btn-small{
   padding:14px 16px;
   font-size:14px;
-  background:
-    radial-gradient(circle at top left, rgba(147,197,253,.75), transparent 38%),
-    linear-gradient(135deg,#0f172a,#1e40af,#2563eb);
-}
-
-.btn-reset{
-  background:
-    radial-gradient(circle at top left, rgba(251,191,36,.75), transparent 38%),
-    linear-gradient(135deg,#1f2937,#334155,#475569);
 }
 
 .btn-dark{
   background:
     radial-gradient(circle at top left, rgba(168,85,247,.75), transparent 38%),
     linear-gradient(135deg,#020617,#312e81,#2563eb);
+}
+
+.btn-light{
+  background:
+    radial-gradient(circle at top left, rgba(253,224,71,.9), transparent 38%),
+    linear-gradient(135deg,#f59e0b,#f97316,#2563eb);
+}
+
+.btn-reset{
+  background:
+    radial-gradient(circle at top left, rgba(251,191,36,.75), transparent 38%),
+    linear-gradient(135deg,#1f2937,#334155,#475569);
 }
 
 .btn-scan{
@@ -213,7 +221,6 @@ button:active{
   margin-top:3px;
 }
 
-/* CARD */
 .card{
   background:#eef4ff;
   padding:18px;
@@ -226,12 +233,19 @@ button:active{
 
 body.dark .card{
   background:#1e293b;
+  color:#e5e7eb;
 }
 
 .total{
   background:linear-gradient(135deg,#dcfce7,#bbf7d0);
   border:1px solid #86efac;
   color:#14532d;
+}
+
+body.dark .total{
+  background:linear-gradient(135deg,#064e3b,#065f46);
+  border:1px solid #10b981;
+  color:#d1fae5;
 }
 
 .error{
@@ -241,6 +255,11 @@ body.dark .card{
   margin-top:16px;
   border-radius:18px;
   font-weight:bold;
+}
+
+body.dark .error{
+  background:#450a0a;
+  color:#fecaca;
 }
 
 .section-title{
@@ -284,6 +303,12 @@ body.dark .card{
   background:linear-gradient(135deg,#dcfce7,#f0fdf4);
   border:1px solid #86efac;
   color:#14532d;
+}
+
+body.dark .success{
+  background:linear-gradient(135deg,#052e16,#064e3b);
+  border:1px solid #10b981;
+  color:#d1fae5;
 }
 
 .history button{
@@ -345,11 +370,11 @@ body.dark .card{
   </div>
 
   <div class="top-actions">
-    <button class="btn-small btn-dark" onclick="toggleDark()">
-      <span class="btn-icon">🌙</span>
+    <button id="themeButton" class="btn-small btn-dark" onclick="toggleDark()">
+      <span id="themeIcon" class="btn-icon">🌙</span>
       <span class="btn-text">
-        <span class="btn-title">Dark Mode</span>
-        <span class="btn-sub">ubah tema</span>
+        <span id="themeTitle" class="btn-title">Dark Mode</span>
+        <span id="themeSub" class="btn-sub">ubah tema gelap</span>
       </span>
     </button>
 
@@ -658,6 +683,45 @@ function resetCari(){
 
 function toggleDark(){
   document.body.classList.toggle("dark");
+
+  const isDark = document.body.classList.contains("dark");
+
+  localStorage.setItem("oddoTheme", isDark ? "dark" : "light");
+
+  updateThemeButton();
+}
+
+function updateThemeButton(){
+  const isDark = document.body.classList.contains("dark");
+
+  const themeButton = document.getElementById("themeButton");
+  const themeIcon = document.getElementById("themeIcon");
+  const themeTitle = document.getElementById("themeTitle");
+  const themeSub = document.getElementById("themeSub");
+
+  if(isDark){
+    themeButton.classList.remove("btn-dark");
+    themeButton.classList.add("btn-light");
+    themeIcon.textContent = "☀️";
+    themeTitle.textContent = "Light Mode";
+    themeSub.textContent = "ubah tema terang";
+  }else{
+    themeButton.classList.remove("btn-light");
+    themeButton.classList.add("btn-dark");
+    themeIcon.textContent = "🌙";
+    themeTitle.textContent = "Dark Mode";
+    themeSub.textContent = "ubah tema gelap";
+  }
+}
+
+function loadTheme(){
+  const savedTheme = localStorage.getItem("oddoTheme");
+
+  if(savedTheme === "dark"){
+    document.body.classList.add("dark");
+  }
+
+  updateThemeButton();
 }
 
 function simpanRiwayat(kode){
@@ -751,6 +815,7 @@ async function scanBarcode(){
           border-radius:18px;
           position:absolute;
           box-shadow:0 0 30px rgba(56,189,248,.5);
+          pointer-events:none;
         "></div>
 
         <p style="
@@ -824,6 +889,7 @@ document.getElementById("kode").addEventListener("keydown", function(e){
   }
 });
 
+loadTheme();
 loadData();
 </script>
 
