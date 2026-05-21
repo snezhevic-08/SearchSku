@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OddoSearch Home</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg1:#061426;
+  --bg2:#071021;
+  --card:#0f1a33;
+  --text:#eaf2ff;
+  --muted:#92a2bc;
+  --line:rgba(255,255,255,.16);
+  --blue:#2f6bff;
+  --cyan:#18c6ff;
+  --green:#22c55e;
+  --orange:#ffb347;
+  --shadow:0 22px 60px rgba(0,0,0,.35);
+}
+
+body.light{
+  --bg1:#eaf4ff;
+  --bg2:#f6fff8;
+  --card:#ffffff;
+  --text:#0f1d35;
+  --muted:#64748b;
+  --line:rgba(15,23,42,.14);
+  --shadow:0 22px 55px rgba(37,99,235,.16);
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial, sans-serif;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(47,107,255,.28), transparent 28%),
+    radial-gradient(circle at 90% 18%, rgba(24,198,255,.22), transparent 24%),
+    linear-gradient(145deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  padding:38px 14px 80px;
+}
+
+.app{
+  width:100%;
+  max-width:760px;
+  margin:auto;
+}
+
+.phone-card{
+  position:relative;
+  overflow:hidden;
+  padding:20px;
+  border-radius:34px;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+
+.phone-card::before{
+  content:"";
+  position:absolute;
+  inset:12px;
+  border-radius:28px;
+  border:1px solid var(--line);
+  pointer-events:none;
+}
+
+.hero{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:28px 22px;
+  border-radius:30px;
+  border:1px solid rgba(147,197,253,.58);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(59,130,246,.35), transparent 28%),
+    linear-gradient(135deg,rgba(255,255,255,.08),rgba(59,130,246,.10));
+  overflow:hidden;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  min-width:0;
+}
+
+.logo-icon{
+  width:64px;
+  height:64px;
+  flex:0 0 auto;
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 35% 35%,#17d7ff 0 20%,transparent 22%),
+    conic-gradient(from 120deg,#0ea5e9,#2563eb,#061426,#14d7ff);
+  position:relative;
+  box-shadow:0 14px 35px rgba(37,99,235,.35);
+}
+
+.logo-icon::after{
+  content:"";
+  position:absolute;
+  width:22px;
+  height:8px;
+  background:#1d4ed8;
+  border-radius:999px;
+  right:6px;
+  bottom:11px;
+  transform:rotate(45deg);
+  box-shadow:0 0 18px rgba(24,198,255,.7);
+}
+
+.brand h1{
+  margin:0;
+  font-size:34px;
+  line-height:1.05;
+  letter-spacing:-1.4px;
+}
+
+.brand p{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-weight:700;
+  font-size:18px;
+  line-height:1.5;
+}
+
+.hero-art{
+  width:160px;
+  height:120px;
+  flex:0 0 auto;
+  position:relative;
+}
+
+.search-box-art{
+  position:absolute;
+  width:110px;
+  height:74px;
+  right:24px;
+  top:26px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#8ec5ff,#2358ff 58%,#1b2b8f);
+  transform:rotate(-4deg);
+  box-shadow:0 20px 45px rgba(37,99,235,.42);
+}
+
+.search-box-art::before{
+  content:"";
+  position:absolute;
+  width:42px;
+  height:22px;
+  left:18px;
+  top:27px;
+  border-radius:9px;
+  background:rgba(255,255,255,.55);
+}
+
+.search-glass{
+  position:absolute;
+  width:74px;
+  height:74px;
+  right:0;
+  top:8px;
+  border:10px solid #16bff7;
+  border-radius:50%;
+  box-shadow:0 0 26px rgba(24,198,255,.4);
+}
+
+.search-glass::after{
+  content:"";
+  position:absolute;
+  width:58px;
+  height:15px;
+  background:#2d7cff;
+  border-radius:999px;
+  right:-45px;
+  bottom:-25px;
+  transform:rotate(45deg);
+}
+
+.intro-card{
+  position:relative;
+  margin-top:22px;
+  padding:22px;
+  border-radius:30px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.045);
+}
+
+.intro-card h2{
+  margin:0;
+  font-size:24px;
+}
+
+.intro-card p{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-weight:700;
+  font-size:17px;
+  line-height:1.5;
+}
+
+.menu-grid{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:22px;
+}
+
+.menu-card{
+  min-height:210px;
+  border:0;
+  border-radius:30px;
+  padding:22px;
+  color:white;
+  text-decoration:none;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  box-shadow:0 18px 36px rgba(0,0,0,.18);
+  transition:.18s ease;
+  overflow:hidden;
+  position:relative;
+}
+
+.menu-card:active{
+  transform:scale(.98);
+}
+
+.menu-card::before{
+  content:"";
+  position:absolute;
+  width:160px;
+  height:160px;
+  right:-60px;
+  top:-60px;
+  border-radius:50%;
+  background:rgba(255,255,255,.22);
+}
+
+.menu-card::after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  right:18px;
+  bottom:14px;
+  border-radius:28px;
+  background:rgba(255,255,255,.10);
+  transform:rotate(-8deg);
+}
+
+.heron-card{
+  background:
+    radial-gradient(circle at 85% 10%,rgba(255,255,255,.38),transparent 24%),
+    linear-gradient(135deg,#35c99a,#0891b2,#2673ff);
+}
+
+.stock-card{
+  background:
+    radial-gradient(circle at 85% 10%,rgba(255,255,255,.38),transparent 24%),
+    linear-gradient(135deg,#71a7ff,#245cff,#1d4ed8);
+}
+
+.menu-icon{
+  width:72px;
+  height:72px;
+  border-radius:24px;
+  display:grid;
+  place-items:center;
+  font-size:36px;
+  background:rgba(255,255,255,.20);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);
+  position:relative;
+  z-index:2;
+}
+
+.menu-title{
+  position:relative;
+  z-index:2;
+}
+
+.menu-title strong{
+  display:block;
+  font-size:28px;
+  line-height:1.05;
+}
+
+.menu-title span{
+  display:block;
+  margin-top:10px;
+  font-size:15px;
+  font-weight:800;
+  opacity:.9;
+  line-height:1.4;
+}
+
+.menu-arrow{
+  position:absolute;
+  right:22px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:52px;
+  font-weight:300;
+  opacity:.78;
+  z-index:3;
+}
+
+.theme-row{
+  position:relative;
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:1fr;
+}
+
+.theme-btn{
+  width:100%;
+  border:0;
+  border-radius:28px;
+  min-height:96px;
+  padding:20px;
+  color:white;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  text-align:left;
+  background:
+    radial-gradient(circle at 70% 20%,rgba(255,255,255,.6),transparent 18%),
+    linear-gradient(135deg,#ffb33f,#ff914d 42%,#2864ff);
+  box-shadow:0 18px 36px rgba(0,0,0,.18);
+}
+
+.theme-left{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.theme-icon{
+  width:60px;
+  height:60px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  font-size:30px;
+  background:rgba(255,255,255,.20);
+}
+
+.theme-btn strong{
+  display:block;
+  font-size:24px;
+}
+
+.theme-btn span{
+  display:block;
+  margin-top:7px;
+  font-size:14px;
+  font-weight:800;
+  opacity:.9;
+}
+
+.status-card{
+  position:relative;
+  margin-top:22px;
+  border-radius:30px;
+  padding:22px;
+  border:1px solid rgba(34,197,94,.32);
+  background:linear-gradient(135deg,#075c2d,#047857,#064e3b);
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.status-icon{
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#22c55e;
+  color:white;
+  font-size:48px;
+  font-weight:1000;
+  box-shadow:0 16px 35px rgba(34,197,94,.32);
+}
+
+.status-card h2{
+  margin:0;
+  font-size:26px;
+}
+
+.status-card p{
+  margin:8px 0 0;
+  font-size:17px;
+  color:rgba(255,255,255,.82);
+  font-weight:700;
+  line-height:1.45;
+}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:17px;
+  font-weight:800;
+  margin-top:26px;
+}
+
+@media(max-width:620px){
+  body{
+    padding:18px 10px 60px;
+  }
+
+  .phone-card{
+    padding:18px;
+    border-radius:28px;
+  }
+
+  .hero{
+    padding:22px 16px;
+    border-radius:26px;
+  }
+
+  .logo-icon{
+    width:50px;
+    height:50px;
+    border-radius:17px;
+  }
+
+  .brand h1{
+    font-size:27px;
+    letter-spacing:-1px;
+  }
+
+  .brand p{
+    font-size:15px;
+  }
+
+  .hero-art{
+    width:118px;
+    height:92px;
+  }
+
+  .search-box-art{
+    width:82px;
+    height:56px;
+    border-radius:18px;
+    right:19px;
+  }
+
+  .search-glass{
+    width:58px;
+    height:58px;
+    border-width:8px;
+  }
+
+  .search-glass::after{
+    width:45px;
+    height:12px;
+    right:-35px;
+    bottom:-20px;
+  }
+
+  .menu-card{
+    min-height:180px;
+    padding:18px;
+    border-radius:26px;
+  }
+
+  .menu-icon{
+    width:60px;
+    height:60px;
+    border-radius:20px;
+    font-size:30px;
+  }
+
+  .menu-title strong{
+    font-size:23px;
+  }
+
+  .menu-title span{
+    font-size:13px;
+  }
+
+  .menu-arrow{
+    display:none;
+  }
+
+  .status-icon{
+    width:70px;
+    height:70px;
+    font-size:40px;
+  }
+
+  .status-card h2{
+    font-size:23px;
+  }
+}
+
+@media(max-width:430px){
+  .hero-art{
+    display:none;
+  }
+
+  .menu-grid{
+    grid-template-columns:1fr;
+  }
+
+  .menu-card{
+    min-height:158px;
+  }
+
+  .menu-card{
+    flex-direction:row;
+    align-items:center;
+    gap:16px;
+  }
+
+  .menu-title{
+    flex:1;
+  }
+
+  .status-card{
+    align-items:flex-start;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <div class="phone-card">
+
+    <div class="hero">
+      <div class="brand">
+        <div class="logo-icon"></div>
+        <div>
+          <h1>OddoSearch</h1>
+          <p>Pilih fitur pencarian yang ingin digunakan</p>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="search-box-art"></div>
+        <div class="search-glass"></div>
+      </div>
+    </div>
+
+    <div class="intro-card">
+      <h2>📦 Pusat Pencarian Gudang</h2>
+      <p>
+        Gunakan halaman ini sebagai pintu utama untuk mencari kode Heron atau stock item.
+        Pilih salah satu menu di bawah.
+      </p>
+    </div>
+
+    <div class="menu-grid">
+
+      <a class="menu-card heron-card" href="heron.html">
+        <div class="menu-icon">📍</div>
+        <div class="menu-title">
+          <strong>Cari Kode Heron</strong>
+          <span>Cari koordinat Heron dari ODDO atau barcode</span>
+        </div>
+        <div class="menu-arrow">›</div>
+      </a>
+
+      <a class="menu-card stock-card" href="oddo.html">
+        <div class="menu-icon">📦</div>
+        <div class="menu-title">
+          <strong>Cari Stock Item</strong>
+          <span>Cari barang, stock, batch, koordinat, dan kode Heron</span>
+        </div>
+        <div class="menu-arrow">›</div>
+      </a>
+
+    </div>
+
+    <div class="theme-row">
+      <button class="theme-btn" onclick="toggleMode()">
+        <div class="theme-left">
+          <div class="theme-icon" id="themeIcon">☀️</div>
+          <div>
+            <strong id="themeText">Light Mode</strong>
+            <span>Ubah tampilan tema</span>
+          </div>
+        </div>
+        <div style="font-size:40px;opacity:.75;">›</div>
+      </button>
+    </div>
+
+    <div class="status-card">
+      <div class="status-icon">✓</div>
+      <div>
+        <h2>Homepage siap digunakan</h2>
+        <p>
+          Pastikan file <b>index.html</b>, <b>heron.html</b>, dan <b>oddo.html</b>
+          berada di folder GitHub yang sama.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    🛡️ OddoSearch © 2026 • Built for #JuaraVibeCoding 🚀
+  </div>
+
+</div>
+
+<script>
+function toggleMode(){
+  document.body.classList.toggle("light");
+
+  const isLight = document.body.classList.contains("light");
+  localStorage.setItem("homeMode", isLight ? "light" : "dark");
+
+  document.getElementById("themeText").textContent = isLight ? "Dark Mode" : "Light Mode";
+  document.getElementById("themeIcon").textContent = isLight ? "🌙" : "☀️";
+}
+
+function loadMode(){
+  const mode = localStorage.getItem("homeMode");
+
+  if(mode === "light"){
+    document.body.classList.add("light");
+    document.getElementById("themeText").textContent = "Dark Mode";
+    document.getElementById("themeIcon").textContent = "🌙";
+  }
+}
+
+loadMode();
+</script>
+
+</body>
+</html>
