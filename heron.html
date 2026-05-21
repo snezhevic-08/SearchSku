@@ -17,6 +17,8 @@
   --soft-blue:#eff6ff;
   --line:#dbeafe;
   --card:#ffffff;
+  --bg1:#eaf4ff;
+  --bg2:#f4fff5;
 }
 
 body{
@@ -26,7 +28,7 @@ body{
   background:
     radial-gradient(circle at 15% 0%, rgba(59,130,246,.18), transparent 28%),
     radial-gradient(circle at 90% 20%, rgba(34,211,238,.16), transparent 26%),
-    linear-gradient(135deg,#eaf4ff,#f4fff5);
+    linear-gradient(135deg,var(--bg1),var(--bg2));
   padding:26px 14px;
   color:var(--text);
 }
@@ -34,677 +36,341 @@ body{
 body.dark{
   --text:#e5e7eb;
   --muted:#94a3b8;
-  --card:#0f172a;
-  --soft-blue:#1e293b;
-  --line:#334155;
+  --card:#111827;
+  --line:#1e3a8a;
+  --soft-blue:#172554;
+  --bg1:#020617;
+  --bg2:#0f172a;
   background:
-    radial-gradient(circle at 10% 0%, rgba(37,99,235,.28), transparent 30%),
-    radial-gradient(circle at 90% 10%, rgba(20,184,166,.22), transparent 28%),
-    linear-gradient(135deg,#020617,#0f172a);
+    radial-gradient(circle at 15% 0%, rgba(59,130,246,.20), transparent 28%),
+    radial-gradient(circle at 90% 20%, rgba(34,211,238,.12), transparent 26%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
 }
 
-.app{
-  width:100%;
-  max-width:430px;
+.container{
+  max-width:720px;
   margin:auto;
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:32px;
+  padding:20px;
+  box-shadow:0 20px 55px rgba(37,99,235,.12);
+  backdrop-filter:blur(18px);
 }
 
-.shell{
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(255,255,255,.75);
-  border-radius:30px;
-  padding:12px;
-  box-shadow:
-    0 25px 70px rgba(15,23,42,.13),
-    inset 0 1px 0 rgba(255,255,255,.8);
-  backdrop-filter:blur(20px);
+body.dark .container{
+  background:rgba(15,23,42,.72);
+  border:1px solid rgba(148,163,184,.18);
 }
 
-body.dark .shell{
-  background:rgba(15,23,42,.88);
-  border-color:rgba(148,163,184,.2);
-}
-
-/* HERO */
-.hero{
-  display:grid;
-  grid-template-columns:1fr 118px;
-  gap:10px;
-  align-items:center;
-  min-height:128px;
-  padding:18px 18px;
-  border-radius:27px;
-  background:
-    radial-gradient(circle at 100% 0%, rgba(56,189,248,.22), transparent 36%),
-    linear-gradient(135deg,#ffffff,#eef8ff);
-  border:1px solid #dbeafe;
-  box-shadow:0 12px 28px rgba(59,130,246,.08);
-  overflow:hidden;
-}
-
-body.dark .hero{
-  background:
-    radial-gradient(circle at 100% 0%, rgba(56,189,248,.15), transparent 36%),
-    linear-gradient(135deg,#0f172a,#172554);
-}
-
-.brand{
-  display:flex;
-  gap:13px;
-  align-items:center;
-  min-width:0;
-}
-
-.logo-image{
-  width:62px;
-  height:62px;
-  object-fit:contain;
-  border-radius:18px;
-  flex-shrink:0;
-}
-
-.brand h1{
-  margin:0;
-  font-size:25px;
-  letter-spacing:-1px;
-  color:#08245f;
-  line-height:1;
-}
-
-body.dark .brand h1{
-  color:#e0f2fe;
-}
-
-.sub{
-  margin:9px 0 0;
-  font-size:14px;
-  line-height:1.4;
-  color:#64748b;
-}
-
-body.dark .sub{
-  color:#cbd5e1;
-}
-
-/* FAKE 3D ILLUSTRATION */
-.hero-art{
-  position:relative;
-  width:118px;
-  height:100px;
-}
-
-.dots{
-  position:absolute;
-  right:0;
-  top:4px;
-  width:60px;
-  height:60px;
-  background-image:radial-gradient(rgba(37,99,235,.22) 2px, transparent 2px);
-  background-size:10px 10px;
-}
-
-.cube{
-  position:absolute;
-  right:30px;
-  bottom:12px;
-  width:74px;
-  height:62px;
-  border-radius:18px;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(255,255,255,.8), transparent 22%),
-    linear-gradient(135deg,#93c5fd,#2563eb,#7c3aed);
-  box-shadow:0 18px 34px rgba(37,99,235,.24);
-  transform:rotate(-5deg);
-}
-
-.cube::after{
-  content:"";
-  position:absolute;
-  width:26px;
-  height:18px;
-  border-radius:5px;
-  left:25px;
-  bottom:14px;
-  background:rgba(255,255,255,.72);
-  box-shadow:inset 0 -5px 0 rgba(37,99,235,.12);
-}
-
-.lens{
-  position:absolute;
-  right:6px;
-  top:12px;
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  border:8px solid #0ea5e9;
-  background:rgba(255,255,255,.22);
-  box-shadow:0 14px 28px rgba(14,165,233,.26);
-}
-
-.lens::after{
-  content:"";
-  position:absolute;
-  width:13px;
-  height:42px;
-  border-radius:999px;
-  right:-18px;
-  bottom:-28px;
-  background:linear-gradient(180deg,#38bdf8,#2563eb);
-  transform:rotate(-42deg);
-}
-
-/* SEARCH */
-.search-card{
-  margin-top:12px;
-  min-height:76px;
+.header{
   display:flex;
   align-items:center;
-  gap:11px;
-  padding:10px;
-  border-radius:25px;
-  background:rgba(255,255,255,.96);
-  border:1px solid #e2e8f0;
-  box-shadow:0 13px 30px rgba(15,23,42,.08);
+  gap:14px;
+  margin-bottom:20px;
 }
 
-body.dark .search-card{
-  background:rgba(15,23,42,.95);
-  border-color:#334155;
-}
-
-.search-icon{
-  width:50px;
-  height:50px;
-  min-width:50px;
-  border-radius:17px;
+.logo{
+  width:66px;
+  height:66px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#60a5fa,#2563eb);
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:32px;
+  box-shadow:0 15px 25px rgba(37,99,235,.28);
+}
+
+.header h1{
+  margin:0;
   font-size:25px;
-  color:white;
+  line-height:1.1;
+}
+
+.header p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-weight:600;
+}
+
+.search-box{
+  background:var(--card);
+  border:1px solid rgba(219,234,254,.95);
+  border-radius:28px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 12px 30px rgba(15,23,42,.06);
+}
+
+.search-icon{
+  width:58px;
+  height:58px;
+  border-radius:20px;
   background:linear-gradient(135deg,#60a5fa,#2563eb);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:30px;
+  flex-shrink:0;
 }
 
 input{
-  flex:1;
-  min-width:0;
-  border:none;
-  outline:none;
+  width:100%;
+  border:0;
+  outline:0;
   background:transparent;
+  font-size:22px;
+  font-weight:600;
   color:var(--text);
-  font-size:16px;
-  padding:12px 0;
 }
 
 input::placeholder{
   color:#94a3b8;
 }
 
-/* ACTION GRID */
-.actions{
-  margin-top:14px;
+.menu{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:14px;
+  margin-top:20px;
 }
 
-.action-btn{
-  height:86px;
-  border:none;
-  border-radius:23px;
-  padding:12px;
+.btn{
+  border:0;
+  border-radius:24px;
+  padding:18px;
+  min-height:105px;
   color:white;
   display:flex;
   align-items:center;
-  gap:11px;
+  justify-content:space-between;
   cursor:pointer;
-  position:relative;
-  overflow:hidden;
   text-align:left;
-  box-shadow:0 16px 32px rgba(37,99,235,.18);
+  box-shadow:0 14px 28px rgba(37,99,235,.18);
+  transition:.2s;
 }
 
-.action-btn::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at 18% 15%, rgba(255,255,255,.32), transparent 26%),
-    linear-gradient(120deg, transparent, rgba(255,255,255,.12), transparent);
-}
-
-.action-btn::after{
-  content:"›";
-  margin-left:auto;
-  font-size:34px;
-  opacity:.62;
-  z-index:2;
-}
-
-.action-btn:active{
+.btn:active{
   transform:scale(.98);
 }
 
-.btn-icon{
-  width:50px;
-  height:50px;
-  min-width:50px;
-  border-radius:20px;
+.btn .left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.btn .ico{
+  width:56px;
+  height:56px;
+  border-radius:18px;
   background:rgba(255,255,255,.18);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:25px;
-  z-index:2;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
+  font-size:27px;
+  backdrop-filter:blur(10px);
 }
 
-.btn-copy{
-  z-index:2;
-  min-width:0;
-}
-
-.btn-title{
+.btn b{
+  font-size:24px;
   display:block;
-  font-size:18px;
-  font-weight:900;
-  line-height:1.05;
-  white-space:nowrap;
 }
 
-.btn-sub{
+.btn small{
   display:block;
   margin-top:5px;
-  font-size:12px;
+  font-size:14px;
   opacity:.86;
   font-weight:700;
-  white-space:nowrap;
 }
 
-.btn-dark{
-  background:linear-gradient(135deg,#020617,#312e81,#2563eb);
+.arrow{
+  font-size:34px;
+  opacity:.75;
 }
 
-.btn-light{
-  background:linear-gradient(135deg,#f59e0b,#fb923c,#2563eb);
+.dark-btn{
+  background:linear-gradient(135deg,#111827,#2563eb);
 }
 
-.btn-reset{
-  background:linear-gradient(135deg,#0891b2,#0f766e,#0284c7);
+.reset-btn{
+  background:linear-gradient(135deg,#14b8a6,#0284c7);
 }
 
-.btn-search{
-  background:linear-gradient(135deg,#3b82f6,#1d4ed8,#2563eb);
+.search-btn{
+  background:linear-gradient(135deg,#3b82f6,#2563eb);
 }
 
-.btn-scan{
-  background:linear-gradient(135deg,#059669,#0d9488,#2563eb);
+.scan-btn{
+  background:linear-gradient(135deg,#10b981,#2563eb);
 }
 
-/* PANELS */
-.panel{
-  margin-top:14px;
-  padding:16px;
-  border-radius:23px;
-  background:rgba(255,255,255,.88);
-  border:1px solid #e2e8f0;
-  box-shadow:0 12px 26px rgba(15,23,42,.06);
-  animation:muncul .28s ease;
+.card{
+  margin-top:20px;
+  background:var(--card);
+  border:1px solid rgba(219,234,254,.9);
+  border-radius:28px;
+  padding:20px;
+  box-shadow:0 12px 30px rgba(15,23,42,.05);
 }
 
-body.dark .panel{
-  background:rgba(15,23,42,.88);
-  border-color:#334155;
-}
-
-.panel-head{
+.card-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:8px;
-  margin-bottom:13px;
+  gap:10px;
+  margin-bottom:16px;
 }
 
-.panel-title{
-  font-size:15px;
-  font-weight:900;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.see-all{
-  color:#2563eb;
-  font-weight:900;
-  font-size:13px;
-  white-space:nowrap;
-  cursor:pointer;
-}
-
-.chips{
-  display:flex;
-  gap:9px;
-  flex-wrap:nowrap;
-  overflow-x:auto;
-  padding-bottom:2px;
-}
-
-.chips::-webkit-scrollbar{
-  display:none;
-}
-
-.chip{
-  border:none;
-  padding:9px 13px;
-  border-radius:999px;
-  background:linear-gradient(135deg,#f8fafc,#eef4ff);
-  color:#1e3a8a;
-  font-weight:900;
-  cursor:pointer;
-  white-space:nowrap;
-  box-shadow:inset 0 0 0 1px rgba(37,99,235,.08);
-}
-
-body.dark .chip{
-  background:linear-gradient(135deg,#1e293b,#0f172a);
-  color:#bfdbfe;
-}
-
-/* STATUS */
-.status-card{
-  min-height:104px;
-  display:grid;
-  grid-template-columns:66px 1fr;
-  align-items:center;
-  gap:15px;
-  background:
-    radial-gradient(circle at 88% 50%, rgba(16,185,129,.20), transparent 30%),
-    linear-gradient(135deg,#ecfdf5,#f0fdf4);
-  border:1px solid #a7f3d0;
-}
-
-body.dark .status-card{
-  background:
-    radial-gradient(circle at 88% 50%, rgba(16,185,129,.16), transparent 30%),
-    linear-gradient(135deg,#052e16,#064e3b);
-  border-color:rgba(16,185,129,.35);
-}
-
-.status-icon{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  font-size:32px;
-  font-weight:900;
-  background:linear-gradient(135deg,#4ade80,#16a34a);
-  box-shadow:0 14px 24px rgba(34,197,94,.26);
-}
-
-.status-title{
-  font-size:20px;
-  font-weight:900;
-  color:#065f46;
-}
-
-.status-sub{
-  margin-top:5px;
-  color:#0f766e;
-  font-size:15px;
-}
-
-.status-sub b{
-  color:#059669;
-}
-
-body.dark .status-title{
-  color:#d1fae5;
-}
-
-body.dark .status-sub{
-  color:#a7f3d0;
-}
-
-/* RESULT HERON */
-.result-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-  margin-bottom:14px;
-}
-
-.result-title{
-  font-size:17px;
-  font-weight:900;
-  display:flex;
-  align-items:center;
-  gap:8px;
+.card-head h2{
+  margin:0;
+  font-size:22px;
 }
 
 .badge{
-  display:inline-block;
-  padding:7px 12px;
-  border-radius:999px;
   background:#dbeafe;
   color:#1d4ed8;
-  font-size:12px;
-  font-weight:900;
-  white-space:nowrap;
+  padding:10px 15px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:14px;
 }
 
-.heron-box-result{
-  display:grid;
-  grid-template-columns:66px 1fr;
-  gap:14px;
-  padding:14px;
-  border-radius:22px;
-  background:linear-gradient(135deg,#f8fbff,#eff6ff);
-  border:1px solid rgba(59,130,246,.2);
+body.dark .badge{
+  background:#1e3a8a;
+  color:#bfdbfe;
 }
 
-body.dark .heron-box-result{
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-}
-
-.box-icon{
-  width:58px;
-  height:58px;
-  border-radius:20px;
+.history-list{
   display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  background:linear-gradient(135deg,#dbeafe,#ffffff);
-}
-
-body.dark .box-icon{
-  background:linear-gradient(135deg,#1e3a8a,#0f172a);
-}
-
-.heron-list{
-  display:grid;
+  flex-wrap:wrap;
   gap:10px;
 }
 
+.history-item{
+  border:1px solid var(--line);
+  background:var(--soft-blue);
+  color:#1e3a8a;
+  font-weight:800;
+  border-radius:999px;
+  padding:10px 16px;
+  cursor:pointer;
+}
+
+body.dark .history-item{
+  color:#bfdbfe;
+}
+
+.result-box{
+  background:linear-gradient(180deg,#f8fbff,#eef6ff);
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:18px;
+}
+
+body.dark .result-box{
+  background:linear-gradient(180deg,#0f172a,#111827);
+}
+
 .heron-item{
-  padding:14px;
-  border-radius:18px;
-  background:rgba(255,255,255,.85);
-  border:1px solid #dbeafe;
-}
-
-body.dark .heron-item{
-  background:rgba(15,23,42,.85);
-  border-color:#334155;
-}
-
-.info-label{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:4px;
-}
-
-.info-value{
-  font-size:20px;
-  font-weight:900;
-  color:#2563eb;
-  word-break:break-word;
-}
-
-body.dark .info-value{
-  color:#93c5fd;
-}
-
-.source-text{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:13px;
-  font-weight:700;
-}
-
-.error{
-  background:#fee2e2;
-  color:#b91c1c;
-  padding:16px;
-  margin-top:14px;
+  background:var(--card);
+  border:1px solid var(--line);
   border-radius:22px;
-  font-weight:bold;
-  line-height:1.7;
+  padding:17px 20px;
+  margin-bottom:14px;
 }
 
-body.dark .error{
-  background:#450a0a;
-  color:#fecaca;
+.heron-item small{
+  display:block;
+  color:var(--muted);
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.heron-item b{
+  font-size:26px;
+  color:#2563eb;
+}
+
+.found{
+  text-align:center;
+  color:var(--muted);
+  font-weight:800;
+  margin:14px 0 0;
+}
+
+.empty{
+  color:var(--muted);
+  font-weight:700;
+  text-align:center;
+  padding:20px 8px;
 }
 
 .loading{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.spinner{
-  width:30px;
-  height:30px;
-  border:4px solid #dbeafe;
-  border-top:4px solid #2563eb;
-  border-radius:50%;
-  animation:putar .8s linear infinite;
-}
-
-.footer{
-  text-align:center;
-  margin:18px 0 0;
-  color:#64748b;
-  font-size:13px;
-}
-
-body.dark .footer{
-  color:#94a3b8;
-}
-
-@keyframes putar{
-  to{transform:rotate(360deg)}
-}
-
-@keyframes muncul{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-/* SCANNER */
-.scanner-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.96);
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  padding:20px;
-}
-
-.scanner-video{
-  width:100%;
-  max-width:430px;
-  border-radius:26px;
-  box-shadow:0 20px 50px rgba(0,0,0,.45);
-}
-
-.scanner-frame{
-  width:260px;
-  height:130px;
-  border:3px solid #38bdf8;
-  border-radius:18px;
-  position:absolute;
-  box-shadow:0 0 30px rgba(56,189,248,.5);
-  pointer-events:none;
-}
-
-.scanner-text{
-  color:white;
-  margin-top:18px;
-  font-size:18px;
+  margin-top:16px;
+  color:var(--muted);
+  font-weight:700;
   text-align:center;
 }
 
-.close-scanner{
-  margin-top:18px;
-  padding:14px 22px;
-  border:none;
-  border-radius:16px;
-  background:#2563eb;
-  color:white;
-  font-weight:bold;
-  font-size:16px;
+#reader{
+  display:none;
+  margin-top:20px;
+  overflow:hidden;
+  border-radius:24px;
+  border:1px solid var(--line);
 }
 
-@media(max-width:390px){
-  .hero{
-    grid-template-columns:1fr;
+@media(max-width:560px){
+  body{
+    padding:18px 10px;
   }
 
-  .hero-art{
-    display:none;
+  .container{
+    border-radius:28px;
+    padding:16px;
   }
 
-  .brand h1{
-    font-size:23px;
+  .menu{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
   }
 
-  .actions{
-    gap:9px;
+  .btn{
+    padding:13px;
+    min-height:100px;
+    border-radius:22px;
   }
 
-  .action-btn{
-    height:82px;
-    padding:10px;
+  .btn .left{
+    gap:10px;
   }
 
-  .btn-icon{
-    width:44px;
-    height:44px;
-    min-width:44px;
-    font-size:22px;
+  .btn .ico{
+    width:48px;
+    height:48px;
+    font-size:24px;
   }
 
-  .btn-title{
-    font-size:16px;
+  .btn b{
+    font-size:20px;
   }
 
-  .btn-sub{
-    font-size:11px;
+  .btn small{
+    font-size:13px;
+  }
+
+  .arrow{
+    font-size:28px;
+  }
+
+  input{
+    font-size:20px;
   }
 }
 </style>
@@ -712,430 +378,309 @@ body.dark .footer{
 
 <body>
 
-<div class="app">
-  <div class="shell">
+<div class="container">
 
-    <div class="hero">
-      <div class="brand">
-        <img src="logo.png" class="logo-image" alt="Search Storage Heron Logo">
-        <div>
-          <h1>SEARCH STORAGE HERON</h1>
-          <p class="sub">Cari kode Heron dari ODDO atau Barcode</p>
-        </div>
-      </div>
-
-      <div class="hero-art">
-        <div class="dots"></div>
-        <div class="cube"></div>
-        <div class="lens"></div>
-      </div>
+  <div class="header">
+    <div class="logo">🔎</div>
+    <div>
+      <h1>SEARCH STORAGE HERON</h1>
+      <p>Cari kode Heron dari Oddo atau barcode</p>
     </div>
-
-    <div class="search-card">
-      <div class="search-icon">🔍</div>
-      <input id="kode" placeholder="Masukkan kode ODDO atau Barcode...">
-    </div>
-
-    <div class="actions">
-      <button id="themeButton" class="action-btn btn-dark" onclick="toggleDark()">
-        <span id="themeIcon" class="btn-icon">🌙</span>
-        <span class="btn-copy">
-          <span id="themeTitle" class="btn-title">Dark Mode</span>
-          <span id="themeSub" class="btn-sub">Ubah tema</span>
-        </span>
-      </button>
-
-      <button class="action-btn btn-reset" onclick="resetCari()">
-        <span class="btn-icon">↻</span>
-        <span class="btn-copy">
-          <span class="btn-title">Reset</span>
-          <span class="btn-sub">Bersihkan hasil</span>
-        </span>
-      </button>
-
-      <button class="action-btn btn-search" onclick="cariHeron()">
-        <span class="btn-icon">🔍</span>
-        <span class="btn-copy">
-          <span class="btn-title">Cari</span>
-          <span class="btn-sub">Temukan Heron</span>
-        </span>
-      </button>
-
-      <button class="action-btn btn-scan" onclick="scanBarcode()">
-        <span class="btn-icon">📷</span>
-        <span class="btn-copy">
-          <span class="btn-title">Scan</span>
-          <span class="btn-sub">Pakai kamera</span>
-        </span>
-      </button>
-    </div>
-
-    <div id="history" class="panel" style="display:none;"></div>
-
-    <div id="hasil">
-      <div class="panel loading">
-        <div class="spinner"></div>
-        <div>
-          <b>Mengambil data...</b><br>
-          Search Storage Heron sedang membaca sheet.
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <div class="footer">
-    🛡️ Search Storage Heron © 2026 • Built for #JuaraVibeCoding 🚀
+  <div class="search-box">
+    <div class="search-icon">🔍</div>
+    <input id="kode" type="text" placeholder="Masukkan kode Oddo / barcode" autocomplete="off">
   </div>
+
+  <div class="loading" id="statusData">Memuat data...</div>
+
+  <div class="menu">
+    <button class="btn dark-btn" onclick="toggleDark()">
+      <div class="left">
+        <div class="ico">🌙</div>
+        <div>
+          <b>Dark Mode</b>
+          <small>Ubah tema</small>
+        </div>
+      </div>
+      <div class="arrow">›</div>
+    </button>
+
+    <button class="btn reset-btn" onclick="resetCari()">
+      <div class="left">
+        <div class="ico">↻</div>
+        <div>
+          <b>Reset</b>
+          <small>Bersihkan hasil</small>
+        </div>
+      </div>
+      <div class="arrow">›</div>
+    </button>
+
+    <button class="btn search-btn" onclick="cariHeron()">
+      <div class="left">
+        <div class="ico">🔍</div>
+        <div>
+          <b>Cari</b>
+          <small>Temukan Heron</small>
+        </div>
+      </div>
+      <div class="arrow">›</div>
+    </button>
+
+    <button class="btn scan-btn" onclick="mulaiScan()">
+      <div class="left">
+        <div class="ico">📷</div>
+        <div>
+          <b>Scan</b>
+          <small>Pakai kamera</small>
+        </div>
+      </div>
+      <div class="arrow">›</div>
+    </button>
+  </div>
+
+  <div id="reader"></div>
+
+  <div class="card">
+    <div class="card-head">
+      <h2>🕘 Riwayat pencarian</h2>
+      <span class="badge" onclick="hapusRiwayat()" style="cursor:pointer;">Hapus</span>
+    </div>
+    <div class="history-list" id="riwayat"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <h2>📄 Hasil pencarian</h2>
+      <span class="badge" id="jumlahHasil">0 kode Heron</span>
+    </div>
+
+    <div class="result-box" id="hasil">
+      <div class="empty">Masukkan kode lalu tekan Cari.</div>
+    </div>
+  </div>
+
 </div>
 
+<script src="https://unpkg.com/html5-qrcode"></script>
+
 <script>
-let semuaData = [];
-let riwayat = JSON.parse(localStorage.getItem("riwayatHeron")) || [];
-
-const SHEET_ID = "1gcRgVkZLU1zyrsdg7rLrDvhYG7O907QGYKYnY9WW-I0";
-
-const SHEETS = [
-  { nama: "STORAGE G5", gid: "1038187077" },
-  { nama: "BATCH PICKING", gid: "578577194" }
+const DATA_SOURCES = [
+  {
+    nama: "STORAGE G5",
+    url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ/pub?gid=1038187077&single=true&output=csv"
+  },
+  {
+    nama: "BATCH PICKING",
+    url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ/pub?gid=578577194&single=true&output=csv"
+  }
 ];
+
+/*
+PENTING:
+Kalau link di atas belum jalan, ganti bagian url dengan link CSV publish spreadsheet kamu.
+
+Format link biasanya:
+https://docs.google.com/spreadsheets/d/e/KODE_PUBLISH/pub?gid=GID_SHEET&single=true&output=csv
+*/
+
+let semuaData = [];
+let scannerAktif = false;
+let html5QrCode = null;
 
 function clean(teks){
   return String(teks || "")
     .trim()
-    .toLowerCase()
-    .replace(/\s+/g,"")
-    .replace(/[^a-z0-9]/g,"")
-    .replace(/^0+/,"");
+    .replace(/^'/, "")
+    .replace(/\s+/g, "")
+    .toUpperCase();
 }
 
 function parseCSV(text){
   const rows = [];
   let row = [];
-  let value = "";
-  let insideQuotes = false;
+  let cell = "";
+  let quote = false;
 
   for(let i = 0; i < text.length; i++){
     const char = text[i];
     const next = text[i + 1];
 
-    if(char === '"' && insideQuotes && next === '"'){
-      value += '"';
+    if(char === '"' && quote && next === '"'){
+      cell += '"';
       i++;
-    } else if(char === '"'){
-      insideQuotes = !insideQuotes;
-    } else if(char === "," && !insideQuotes){
-      row.push(value);
-      value = "";
-    } else if((char === "\n" || char === "\r") && !insideQuotes){
-      if(value || row.length){
-        row.push(value);
+    }else if(char === '"'){
+      quote = !quote;
+    }else if(char === "," && !quote){
+      row.push(cell);
+      cell = "";
+    }else if((char === "\n" || char === "\r") && !quote){
+      if(cell || row.length){
+        row.push(cell);
         rows.push(row);
         row = [];
-        value = "";
+        cell = "";
       }
-
-      if(char === "\r" && next === "\n"){
-        i++;
-      }
-    } else {
-      value += char;
+      if(char === "\r" && next === "\n") i++;
+    }else{
+      cell += char;
     }
   }
 
-  if(value || row.length){
-    row.push(value);
+  if(cell || row.length){
+    row.push(cell);
     rows.push(row);
   }
 
   return rows;
 }
 
-async function ambilSheet(info){
-  const url =
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${info.gid}`;
-
-  const res = await fetch(url);
-
-  if(!res.ok){
-    throw new Error("Gagal membaca " + info.nama);
-  }
-
-  const text = await res.text();
-  const rows = parseCSV(text);
-
-  return rows.slice(1).map((r,index) => {
-    const heron = r[6] || "";
-
-    return {
-      sheet: info.nama,
-      row: index + 2,
-      heron: heron,
-      semuaKolom: r,
-      searchText: clean(r.join(" "))
-    };
-  }).filter(item => clean(item.heron));
-}
-
 async function loadData(){
+  const status = document.getElementById("statusData");
   semuaData = [];
-  const hasil = document.getElementById("hasil");
 
-  hasil.innerHTML = `
-    <div class="panel loading">
-      <div class="spinner"></div>
-      <div>
-        <b>Mengambil data...</b><br>
-        Membaca STORAGE G5 dan BATCH PICKING.
-      </div>
-    </div>
-  `;
+  try{
+    for(const sumber of DATA_SOURCES){
+      const res = await fetch(sumber.url);
+      const text = await res.text();
+      const rows = parseCSV(text);
 
-  for(const sheet of SHEETS){
-    try{
-      const data = await ambilSheet(sheet);
-      semuaData.push(...data);
-      console.log(`Berhasil baca ${sheet.nama}:`, data.length);
-    }catch(e){
-      console.log("Gagal membaca:", sheet.nama, e);
+      rows.forEach((row, index) => {
+        if(index === 0) return;
+
+        semuaData.push({
+          sumber: sumber.nama,
+          row: row
+        });
+      });
     }
+
+    status.textContent = "Data siap digunakan: " + semuaData.length + " baris";
+  }catch(error){
+    status.textContent = "Gagal memuat data. Periksa link CSV.";
+    console.error(error);
   }
-
-  if(semuaData.length === 0){
-    hasil.innerHTML = `
-      <div class="error">
-        Data gagal dimuat atau total data 0.<br><br>
-        Cek:<br>
-        1. Spreadsheet harus public/viewer<br>
-        2. Internet stabil<br>
-        3. GID sheet benar<br>
-        4. Kode Heron ada di kolom G
-      </div>
-    `;
-    return;
-  }
-
-  tampilStatusSiap();
-}
-
-function tampilStatusSiap(){
-  const hasil = document.getElementById("hasil");
-
-  hasil.innerHTML = `
-    <div class="panel status-card">
-      <div class="status-icon">✓</div>
-      <div>
-        <div class="status-title">Data siap digunakan</div>
-        <div class="status-sub">Total data terbaca: <b>${semuaData.length}</b></div>
-      </div>
-    </div>
-  `;
 }
 
 function cariHeron(){
-  if(semuaData.length === 0){
-    alert("Data masih dimuat atau gagal dibaca.");
-    return;
-  }
-
-  const input = document.getElementById("kode").value;
-  const kode = clean(input);
+  const input = document.getElementById("kode");
+  const kode = clean(input.value);
   const hasil = document.getElementById("hasil");
+  const jumlahHasil = document.getElementById("jumlahHasil");
 
-  if(!input.trim()){
-    hasil.innerHTML = `<div class="error">Masukkan kode ODDO atau Barcode dulu.</div>`;
+  if(!kode){
+    hasil.innerHTML = `<div class="empty">Masukkan kode Oddo atau barcode dulu.</div>`;
+    jumlahHasil.textContent = "0 kode Heron";
     return;
   }
+
+  if(semuaData.length === 0){
+    hasil.innerHTML = `<div class="empty">Data masih dimuat...</div>`;
+    jumlahHasil.textContent = "0 kode Heron";
+    return;
+  }
+
+  const hasilFilter = semuaData.filter(item => {
+    const row = item.row;
+
+    /*
+      MODE SAMA PERSIS
+      Tidak pakai includes().
+      Jadi 07168 hanya cocok dengan 07168.
+      Tidak akan cocok dengan 7168 atau angka yang cuma mirip.
+    */
+
+    return (
+      clean(row[0]) === kode ||
+      clean(row[1]) === kode ||
+      clean(row[2]) === kode ||
+      clean(row[3]) === kode ||
+      clean(row[4]) === kode ||
+      clean(row[5]) === kode ||
+      clean(row[7]) === kode ||
+      clean(row[8]) === kode ||
+      clean(row[9]) === kode ||
+      clean(row[10]) === kode
+    );
+  });
+
+  if(hasilFilter.length === 0){
+    hasil.innerHTML = `<div class="empty">Kode tidak ditemukan.</div>`;
+    jumlahHasil.textContent = "0 kode Heron";
+    simpanRiwayat(kode);
+    return;
+  }
+
+  const kodeHeron = [...new Set(
+    hasilFilter
+      .map(item => String(item.row[6] || "").trim())
+      .filter(Boolean)
+  )];
+
+  if(kodeHeron.length === 0){
+    hasil.innerHTML = `<div class="empty">Data ditemukan, tapi kolom G / kode Heron kosong.</div>`;
+    jumlahHasil.textContent = "0 kode Heron";
+    simpanRiwayat(kode);
+    return;
+  }
+
+  jumlahHasil.textContent = kodeHeron.length + " kode Heron";
 
   hasil.innerHTML = `
-    <div class="panel loading">
-      <div class="spinner"></div>
-      <div>
-        <b>Mencari kode Heron...</b><br>
-        Memproses data warehouse.
+    ${kodeHeron.map((heron, index) => `
+      <div class="heron-item">
+        <small>Kode Heron ${String(index + 1).padStart(2, "0")}</small>
+        <b>${heron}</b>
       </div>
-    </div>
+    `).join("")}
+
+    <p class="found">Ditemukan dari ${hasilFilter.length} baris data</p>
   `;
 
-  setTimeout(() => {
-    const ditemukan = semuaData.filter(item =>
-      item.searchText.includes(kode)
-    );
-
-    if(ditemukan.length === 0){
-      hasil.innerHTML = `
-        <div class="error">
-          Kode Heron tidak ditemukan.<br>
-          Coba cek kode ODDO atau Barcode.<br><br>
-          Total data terbaca: ${semuaData.length}
-        </div>
-      `;
-
-      simpanRiwayat(input);
-      return;
-    }
-
-    simpanRiwayat(input);
-
-    const heronUnik = [];
-
-    ditemukan.forEach(item => {
-      const h = String(item.heron || "").trim();
-
-      if(h && !heronUnik.includes(h)){
-        heronUnik.push(h);
-      }
-    });
-
-    hasil.innerHTML = `
-      <div class="panel">
-        <div class="result-head">
-          <div class="result-title">📄 Hasil pencarian</div>
-          <span class="badge">${heronUnik.length} kode Heron</span>
-        </div>
-
-        <div class="heron-box-result">
-          <div class="box-icon">📦</div>
-
-          <div>
-            <div class="heron-list">
-              ${heronUnik.map((h,index) => `
-                <div class="heron-item">
-                  <div class="info-label">Kode Heron ${String(index + 1).padStart(2,"0")}</div>
-                  <div class="info-value">${escapeHTML(h)}</div>
-                </div>
-              `).join("")}
-            </div>
-
-            <div class="source-text">
-              Ditemukan dari ${ditemukan.length} baris data
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }, 300);
-}
-
-function escapeHTML(text){
-  return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  simpanRiwayat(kode);
 }
 
 function resetCari(){
   document.getElementById("kode").value = "";
-
-  if(semuaData.length === 0){
-    document.getElementById("hasil").innerHTML = `
-      <div class="error">
-        Data belum siap atau gagal dimuat.
-      </div>
-    `;
-    return;
-  }
-
-  tampilStatusSiap();
+  document.getElementById("hasil").innerHTML = `<div class="empty">Masukkan kode lalu tekan Cari.</div>`;
+  document.getElementById("jumlahHasil").textContent = "0 kode Heron";
 }
 
 function toggleDark(){
   document.body.classList.toggle("dark");
 
-  const isDark = document.body.classList.contains("dark");
-
-  localStorage.setItem("heronTheme", isDark ? "dark" : "light");
-
-  updateThemeButton();
-}
-
-function updateThemeButton(){
-  const isDark = document.body.classList.contains("dark");
-
-  const themeButton = document.getElementById("themeButton");
-  const themeIcon = document.getElementById("themeIcon");
-  const themeTitle = document.getElementById("themeTitle");
-  const themeSub = document.getElementById("themeSub");
-
-  if(isDark){
-    themeButton.classList.remove("btn-dark");
-    themeButton.classList.add("btn-light");
-    themeIcon.textContent = "☀️";
-    themeTitle.textContent = "Light Mode";
-    themeSub.textContent = "Ubah tema";
+  if(document.body.classList.contains("dark")){
+    localStorage.setItem("temaHeron", "dark");
   }else{
-    themeButton.classList.remove("btn-light");
-    themeButton.classList.add("btn-dark");
-    themeIcon.textContent = "🌙";
-    themeTitle.textContent = "Dark Mode";
-    themeSub.textContent = "Ubah tema";
+    localStorage.setItem("temaHeron", "light");
   }
-}
-
-function loadTheme(){
-  const savedTheme = localStorage.getItem("heronTheme");
-
-  if(savedTheme === "dark"){
-    document.body.classList.add("dark");
-  }
-
-  updateThemeButton();
 }
 
 function simpanRiwayat(kode){
-  const nilai = String(kode || "").trim();
+  let data = JSON.parse(localStorage.getItem("riwayatHeron") || "[]");
 
-  if(!nilai) return;
+  data = data.filter(item => item !== kode);
+  data.unshift(kode);
+  data = data.slice(0, 8);
 
-  riwayat = riwayat.filter(item => item !== nilai);
-  riwayat.unshift(nilai);
-  riwayat = riwayat.slice(0,5);
-
-  localStorage.setItem("riwayatHeron", JSON.stringify(riwayat));
+  localStorage.setItem("riwayatHeron", JSON.stringify(data));
   tampilRiwayat();
 }
 
 function tampilRiwayat(){
-  const history = document.getElementById("history");
+  const box = document.getElementById("riwayat");
+  const data = JSON.parse(localStorage.getItem("riwayatHeron") || "[]");
 
-  if(riwayat.length === 0){
-    history.style.display = "none";
-    history.innerHTML = "";
+  if(data.length === 0){
+    box.innerHTML = `<div class="empty" style="padding:0;text-align:left;">Belum ada riwayat.</div>`;
     return;
   }
 
-  history.style.display = "block";
-
-  history.innerHTML = `
-    <div class="panel-head">
-      <div class="panel-title">🕘 Riwayat pencarian</div>
-      <div class="see-all" onclick="lihatSemuaRiwayat()">Lihat semua ›</div>
-    </div>
-
-    <div class="chips">
-      ${riwayat.map(k => `
-        <button class="chip" onclick="pakaiRiwayat('${escapeAttr(k)}')">◷ ${escapeHTML(k)}</button>
-      `).join("")}
-    </div>
-  `;
-}
-
-function escapeAttr(text){
-  return String(text)
-    .replaceAll("\\","\\\\")
-    .replaceAll("'","\\'")
-    .replaceAll('"',"&quot;");
-}
-
-function lihatSemuaRiwayat(){
-  if(riwayat.length === 0){
-    alert("Belum ada riwayat pencarian");
-    return;
-  }
-
-  alert("Riwayat pencarian:\n\n" + riwayat.join("\n"));
+  box.innerHTML = data.map(item => `
+    <button class="history-item" onclick="pakaiRiwayat('${item}')">⊙ ${item}</button>
+  `).join("");
 }
 
 function pakaiRiwayat(kode){
@@ -1143,89 +688,59 @@ function pakaiRiwayat(kode){
   cariHeron();
 }
 
-async function scanBarcode(){
+function hapusRiwayat(){
+  localStorage.removeItem("riwayatHeron");
+  tampilRiwayat();
+}
 
-  if(!("BarcodeDetector" in window)){
-    alert("Browser belum support scan barcode. Coba buka lewat Google Chrome Android.");
+async function mulaiScan(){
+  const reader = document.getElementById("reader");
+
+  if(scannerAktif){
+    await stopScan();
     return;
   }
 
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: "environment"
+  reader.style.display = "block";
+
+  html5QrCode = new Html5Qrcode("reader");
+  scannerAktif = true;
+
+  html5QrCode.start(
+    { facingMode: "environment" },
+    {
+      fps: 10,
+      qrbox: {
+        width: 250,
+        height: 250
       }
-    });
-
-    const detector = new BarcodeDetector({
-      formats: [
-        "ean_13",
-        "ean_8",
-        "code_128",
-        "code_39",
-        "code_93",
-        "qr_code",
-        "upc_a",
-        "upc_e",
-        "itf"
-      ]
-    });
-
-    const scanBox = document.createElement("div");
-
-    scanBox.innerHTML = `
-      <div class="scanner-overlay">
-        <video id="scannerVideo" class="scanner-video" autoplay playsinline muted></video>
-        <div class="scanner-frame"></div>
-        <p class="scanner-text">📷 Arahkan kamera ke barcode barang</p>
-        <button id="tutupScanner" class="close-scanner">Tutup Scanner</button>
-      </div>
-    `;
-
-    document.body.appendChild(scanBox);
-    document.body.style.overflow = "hidden";
-
-    const videoElement = scanBox.querySelector("#scannerVideo");
-    videoElement.srcObject = stream;
-    await videoElement.play();
-
-    function tutupScanner(){
-      stream.getTracks().forEach(track => track.stop());
-      scanBox.remove();
-      document.body.style.overflow = "";
-    }
-
-    document.getElementById("tutupScanner").onclick = tutupScanner;
-
-    async function scanLoop(){
-      if(!document.body.contains(scanBox)) return;
-
-      try{
-        const barcodes = await detector.detect(videoElement);
-
-        if(barcodes.length > 0){
-          const kodeBarcode = barcodes[0].rawValue;
-
-          document.getElementById("kode").value = kodeBarcode;
-
-          tutupScanner();
-          cariHeron();
-          return;
-        }
-      }catch(err){
-        console.log("Scan error:", err);
-      }
-
-      requestAnimationFrame(scanLoop);
-    }
-
-    scanLoop();
-
-  }catch(err){
-    console.log(err);
-    document.body.style.overflow = "";
+    },
+    async decodedText => {
+      document.getElementById("kode").value = decodedText;
+      await stopScan();
+      cariHeron();
+    },
+    errorMessage => {}
+  ).catch(err => {
+    scannerAktif = false;
+    reader.style.display = "none";
     alert("Kamera tidak bisa dibuka. Izinkan akses kamera dulu.");
+    console.error(err);
+  });
+}
+
+async function stopScan(){
+  const reader = document.getElementById("reader");
+
+  if(html5QrCode){
+    try{
+      await html5QrCode.stop();
+      await html5QrCode.clear();
+    }catch(e){}
   }
+
+  scannerAktif = false;
+  reader.style.display = "none";
 }
 
 document.getElementById("kode").addEventListener("keydown", function(e){
@@ -1234,7 +749,10 @@ document.getElementById("kode").addEventListener("keydown", function(e){
   }
 });
 
-loadTheme();
+if(localStorage.getItem("temaHeron") === "dark"){
+  document.body.classList.add("dark");
+}
+
 tampilRiwayat();
 loadData();
 </script>
