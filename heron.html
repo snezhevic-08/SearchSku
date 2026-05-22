@@ -541,6 +541,18 @@ body.dark .heron-item{
   margin-bottom:4px;
 }
 
+.item-name{
+  font-size:15px;
+  font-weight:800;
+  color:#0f172a;
+  line-height:1.35;
+  word-break:break-word;
+}
+
+body.dark .item-name{
+  color:#e5e7eb;
+}
+
 .info-value{
   font-size:20px;
   font-weight:900;
@@ -792,11 +804,6 @@ const SHEETS = [
   { nama: "BATCH PICKING", gid: "578577194" }
 ];
 
-/*
-  CLEAN SAMA PERSIS:
-  07168 tetap 07168.
-  Tidak menghapus angka 0 di depan.
-*/
 function clean(teks){
   return String(teks || "")
     .trim()
@@ -861,18 +868,20 @@ async function ambilSheet(info){
   const rows = parseCSV(text);
 
   return rows.slice(1).map((r,index) => {
+    const namaBarang = r[2] || "";
     const heron = r[6] || "";
 
     return {
       sheet: info.nama,
       row: index + 2,
+      namaBarang: namaBarang,
       heron: heron,
       semuaKolom: r,
 
       /*
-        Kolom pencarian sama persis.
-        Kolom G / r[6] adalah Kode Heron, jadi tidak dipakai untuk dicari.
-        Yang dicari: kolom A-F dan H-K.
+        Kolom C / r[2] dipakai sebagai nama barang.
+        Kolom G / r[6] adalah kode Heron.
+        Yang dicari tetap kolom A-F dan H-K.
       */
       searchKeys: [
         clean(r[0]),
@@ -968,12 +977,6 @@ function cariHeron(){
   `;
 
   setTimeout(() => {
-    /*
-      MODE SAMA PERSIS:
-      Tidak pakai includes().
-      Jadi 07168 hanya cocok dengan 07168.
-      Tidak cocok dengan 7168, 007168, A07168, atau 07168X.
-    */
     const ditemukan = semuaData.filter(item =>
       item.searchKeys.some(key => key === kode)
     );
@@ -993,13 +996,21 @@ function cariHeron(){
 
     simpanRiwayat(input);
 
-    const heronUnik = [];
+    const hasilUnik = [];
 
     ditemukan.forEach(item => {
       const h = String(item.heron || "").trim();
+      const n = String(item.namaBarang || "").trim();
 
-      if(h && !heronUnik.includes(h)){
-        heronUnik.push(h);
+      const sudahAda = hasilUnik.some(data =>
+        data.heron === h && data.namaBarang === n
+      );
+
+      if(h && !sudahAda){
+        hasilUnik.push({
+          heron: h,
+          namaBarang: n || "Nama barang tidak tersedia"
+        });
       }
     });
 
@@ -1007,7 +1018,7 @@ function cariHeron(){
       <div class="panel">
         <div class="result-head">
           <div class="result-title">📄 Hasil pencarian</div>
-          <span class="badge">${heronUnik.length} kode Heron</span>
+          <span class="badge">${hasilUnik.length} hasil</span>
         </div>
 
         <div class="heron-box-result">
@@ -1015,10 +1026,15 @@ function cariHeron(){
 
           <div>
             <div class="heron-list">
-              ${heronUnik.map((h,index) => `
+              ${hasilUnik.map((item,index) => `
                 <div class="heron-item">
-                  <div class="info-label">Kode Heron ${String(index + 1).padStart(2,"0")}</div>
-                  <div class="info-value">${escapeHTML(h)}</div>
+                  <div class="info-label">Nama Barang</div>
+                  <div class="item-name">${escapeHTML(item.namaBarang)}</div>
+
+                  <div class="info-label" style="margin-top:10px;">
+                    Kode Heron ${String(index + 1).padStart(2,"0")}
+                  </div>
+                  <div class="info-value">${escapeHTML(item.heron)}</div>
                 </div>
               `).join("")}
             </div>
